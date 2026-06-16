@@ -287,25 +287,8 @@ select { background: white; cursor: pointer; }
 
   <div id="settingsTab" class="tab-page">
     <div class="scroll-container">
-      <div class="header-gradient"><div class="header-top"><div class="header-title">⏰ 提醒设置</div><div class="header-user" id="settingsUserName">游客</div></div><div class="header-week">配置自动提醒时间</div></div>
+      <div class="header-gradient"><div class="header-top"><div class="header-title">⚙️ 设置</div><div class="header-user" id="settingsUserName">游客</div></div></div>
       <div class="container">
-        <div class="card">
-          <div class="section-title">🔔 每日提醒</div>
-          <div class="reminder-item"><span>早上 9:00 - 更新任务状态</span><div class="toggle-switch" id="toggleMorning" onclick="App.toggleReminder('morning')"></div></div>
-          <div class="reminder-item"><span>下午 17:00 - 检查进度</span><div class="toggle-switch" id="toggleEvening" onclick="App.toggleReminder('evening')"></div></div>
-        </div>
-        <div class="card">
-          <div class="section-title">📅 每周提醒</div>
-          <div class="reminder-item"><span>周五 16:00 - 周汇总提醒</span><div class="toggle-switch" id="toggleWeekly" onclick="App.toggleReminder('weekly')"></div></div>
-          <div class="reminder-item"><span>周日 20:00 - 下周规划</span><div class="toggle-switch" id="toggleSunday" onclick="App.toggleReminder('sunday')"></div></div>
-        </div>
-        <div class="card">
-          <div class="section-title">📝 自定义提醒</div>
-          <div class="input-group"><input type="time" class="input" id="customTime" style="flex:0 0 120px;"><select id="customRepeat" style="flex:1;"><option value="daily">每天</option><option value="weekday">工作日</option><option value="once">一次</option></select></div>
-          <div class="mail-option"><input type="checkbox" id="customMail" checked><label for="customMail" style="font-size:13px;color:#4a5568;cursor:pointer;">同时发送邮件提醒</label></div>
-          <button class="btn btn-primary btn-block" onclick="App.addCustomReminder()" style="margin-top:10px;">添加自定义提醒</button>
-          <div id="customRemindersList" style="margin-top:16px;"></div>
-        </div>
         <div class="card">
           <div class="section-title">🏷️ 分类管理</div>
           <div class="hint">💡 提示：双击自定义分类名称可直接修改</div>
@@ -333,6 +316,7 @@ select { background: white; cursor: pointer; }
 <div class="modal-overlay" id="categoryModal" onclick="App.closeModal('categoryModal')"><div class="modal-card" onclick="event.stopPropagation()"><div class="modal-header"><div class="modal-title">➕ 添加自定义分类</div><div class="modal-close" onclick="App.closeModal('categoryModal')">×</div></div><div class="form-group"><label>分类名称</label><input type="text" class="input" id="categoryModalInput" placeholder="例如：消防工程、智能化..." onkeydown="if(event.key==='Enter')App.confirmAddCategory()"></div><button class="btn btn-primary btn-block" onclick="App.confirmAddCategory()">确认添加</button></div></div>
 <div class="modal-overlay" id="updateModal" onclick="App.closeModal('updateModal')"><div class="modal-card" onclick="event.stopPropagation()"><div class="modal-header"><div class="modal-title">🔄 更新任务进度</div><div class="modal-close" onclick="App.closeModal('updateModal')">×</div></div><div class="form-group"><label>进度更新</label><textarea class="input" id="updateText" placeholder="记录今天的进展..." style="min-height:100px;resize:vertical;"></textarea></div><div class="form-group"><label>状态</label><select id="updateStatus" class="input"><option value="progress">进行中</option><option value="completed">已完成</option><option value="blocked">受阻/需协助</option></select></div><button class="btn btn-primary btn-block" onclick="App.saveUpdate()">保存更新</button></div></div>
 <div class="modal-overlay" id="editCategoryModal" onclick="App.closeModal('editCategoryModal')"><div class="modal-card" onclick="event.stopPropagation()"><div class="modal-header"><div class="modal-title">✏️ 修改分类名称</div><div class="modal-close" onclick="App.closeModal('editCategoryModal')">×</div></div><div class="form-group"><label>新名称</label><input type="text" class="input" id="editCategoryInput" placeholder="输入新名称" onkeydown="if(event.key==='Enter')App.confirmEditCategory()"></div><button class="btn btn-primary btn-block" onclick="App.confirmEditCategory()">确认修改</button></div></div>
+<div class="modal-overlay" id="taskReminderModal" onclick="App.closeModal('taskReminderModal')"><div class="modal-card" onclick="event.stopPropagation()"><div class="modal-header"><div class="modal-title">⏰ 设置任务提醒</div><div class="modal-close" onclick="App.closeModal('taskReminderModal')">×</div></div><div class="form-group"><label>任务名称</label><div id="taskReminderName" style="padding:12px;background:#f7fafc;border-radius:8px;font-size:15px;color:#4a5568;"></div></div><div class="form-group" style="display:flex;justify-content:space-between;align-items:center;"><label style="margin-bottom:0;">启用提醒</label><div class="toggle-switch" id="taskReminderToggle" onclick="App.toggleTaskReminderEnabled()"></div></div><div class="form-group"><label>提醒时间</label><input type="time" class="input" id="taskReminderTime"></div><div class="form-group"><label>重复周期</label><select class="input" id="taskReminderRepeat"><option value="once">一次</option><option value="daily">每天</option><option value="weekly">每周</option></select></div><div class="mail-option"><input type="checkbox" id="taskReminderMail"><label for="taskReminderMail" style="font-size:13px;color:#4a5568;cursor:pointer;">邮件提醒</label></div><div style="display:flex;gap:10px;margin-top:16px;"><button class="btn btn-primary" style="flex:1;" onclick="App.saveTaskReminder()">保存</button><button class="btn" style="flex:1;background:#e2e8f0;color:#4a5568;" onclick="App.closeModal('taskReminderModal')">取消</button></div></div></div>
 
 <script>
 const App = (function() {
@@ -355,14 +339,14 @@ const App = (function() {
   
   let currentUser = null;
   let tasks = [];
-  let reminders = { morning: true, evening: true, weekly: false, sunday: false };
-  let customReminders = [];
+  let taskReminders = {};
   let customCategories = [];
   let activeReminders = [];
   let currentFilter = 'all';
   let editingTaskId = null;
   let editingCategoryId = null;
-  let checkedMinutes = new Set();
+  let editingReminderTaskId = null;
+  let checkedMinuteKey = '';
   let reminderTimer = null;
   
   // ===== 数据层 =====
@@ -376,33 +360,30 @@ const App = (function() {
       const d = JSON.parse(localStorage.getItem(getUserDataKey(username))) || {};
       return {
         tasks: d.tasks || [],
-        reminders: d.reminders || { morning: true, evening: true, weekly: false, sunday: false },
-        customReminders: d.customReminders || [],
+        taskReminders: d.taskReminders || {},
         customCategories: d.customCategories || [],
         activeReminders: d.activeReminders || []
       };
     } catch(e) {
-      return { tasks: [], reminders: { morning: true, evening: true, weekly: false, sunday: false }, customReminders: [], customCategories: [], activeReminders: [] };
+      return { tasks: [], taskReminders: {}, customCategories: [], activeReminders: [] };
     }
   }
   function saveUserData(username, data) { localStorage.setItem(getUserDataKey(username), JSON.stringify(data)); }
   function saveAllData() {
     if (!currentUser || currentUser.isGuest) return;
-    saveUserData(currentUser.username, { tasks, reminders, customReminders, customCategories, activeReminders });
+    saveUserData(currentUser.username, { tasks, taskReminders, customCategories, activeReminders });
   }
   function loadAllData() {
     if (!currentUser) return;
     if (currentUser.isGuest) {
       tasks = [];
-      reminders = { morning: true, evening: true, weekly: false, sunday: false };
-      customReminders = [];
+      taskReminders = {};
       customCategories = [];
       activeReminders = [];
     } else {
       const d = getUserData(currentUser.username);
       tasks = d.tasks;
-      reminders = d.reminders;
-      customReminders = d.customReminders;
+      taskReminders = d.taskReminders || {};
       customCategories = d.customCategories;
       activeReminders = d.activeReminders || [];
     }
@@ -488,7 +469,7 @@ const App = (function() {
     if (db[u]) { showError('registerError', '用户名已存在'); return; }
     db[u] = { password: p, created: new Date().toISOString() };
     saveUsersDB(db);
-    saveUserData(u, { tasks: [], reminders: { morning: true, evening: true, weekly: false, sunday: false }, customReminders: [], customCategories: [], activeReminders: [] });
+    saveUserData(u, { tasks: [], taskReminders: {}, customCategories: [], activeReminders: [] });
     showToast('注册成功！请登录');
     document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
@@ -513,7 +494,7 @@ const App = (function() {
         const username = data.username || 'imported_' + Date.now();
         const db = getUsersDB();
         if (!db[username]) { db[username] = { password: 'imported', created: new Date().toISOString() }; saveUsersDB(db); }
-        saveUserData(username, { tasks: data.tasks || [], reminders: data.reminders || { morning: true, evening: true, weekly: false, sunday: false }, customReminders: data.customReminders || [], customCategories: data.customCategories || [], activeReminders: data.activeReminders || [] });
+        saveUserData(username, { tasks: data.tasks || [], taskReminders: data.taskReminders || {}, customCategories: data.customCategories || [], activeReminders: data.activeReminders || [] });
         currentUser = { username: username, isGuest: false };
         localStorage.setItem(CONFIG.STORAGE_SESSION, JSON.stringify(currentUser));
         loadAllData();
@@ -584,8 +565,9 @@ const App = (function() {
         const icon = u.status === 'completed' ? '✅' : u.status === 'blocked' ? '⚠️' : '🔄';
         return `<div class="update-entry">${icon} ${d.getMonth()+1}/${d.getDate()} ${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')} - ${u.text}</div>`;
       }).join('');
+      const hasReminder = taskReminders[task.id] && taskReminders[task.id].enabled;
       return `<div class="task-card ${task.completed ? 'completed' : ''} ${task.type === 'urgent' && !task.completed ? 'urgent' : ''}">
-        <div class="task-header"><span class="task-title" id="taskTitle-${task.id}" ondblclick="App.startEditTaskName(${task.id})">${escapeHtml(task.text)}</span>
+        <div class="task-header"><span class="task-title" id="taskTitle-${task.id}" ondblclick="App.startEditTaskName(${task.id})">${hasReminder ? '🔔 ' : ''}${escapeHtml(task.text)}</span>
           <div style="display:flex;gap:4px;flex-wrap:wrap;">
             <span class="tag ${task.type === 'daily' ? 'tag-daily' : task.type === 'weekly' ? 'tag-weekly' : 'tag-urgent'}">${TYPE_MAP[task.type]}</span>
             <span class="tag tag-category">${cats[task.category] || '一般'}</span>
@@ -598,6 +580,7 @@ const App = (function() {
           <button class="btn btn-small btn-success" onclick="App.openUpdateModal(${task.id})">🔄 更新</button>
           <button class="btn btn-small ${task.completed ? 'btn-warning' : 'btn-success'}" onclick="App.toggleComplete(${task.id})">${task.completed ? '↩️ 恢复' : '✅ 完成'}</button>
           <button class="btn btn-small btn-danger" onclick="App.deleteTask(${task.id})">🗑️ 删除</button>
+          <button class="btn btn-small btn-add" onclick="App.openTaskReminderModal(${task.id})">⏰ 提醒</button>
         </div>
       </div>`;
     }).join('');
@@ -616,14 +599,14 @@ const App = (function() {
     const range = document.createRange(); range.selectNodeContents(el);
     const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
     el.onblur = function() {
-      const newName = el.textContent.trim();
+      const newName = el.textContent.trim().replace(/^🔔\s*/, '');
       if (newName && newName !== task.text) { task.text = newName; saveAllData(); showToast('任务名称已修改'); }
       el.contentEditable = 'false'; renderHome();
     };
-    el.onkeydown = function(e) { if (e.key === 'Enter') { e.preventDefault(); el.blur(); } else if (e.key === 'Escape') { el.textContent = task.text; el.contentEditable = 'false'; } };
+    el.onkeydown = function(e) { if (e.key === 'Enter') { e.preventDefault(); el.blur(); } else if (e.key === 'Escape') { el.contentEditable = 'false'; renderHome(); } };
   }
   function toggleComplete(id) { const task = tasks.find(t => t.id === id); if (!task) return; task.completed = !task.completed; if (task.completed) { task.updates = task.updates || []; task.updates.push({ time: new Date().toISOString(), text: '标记为完成', status: 'completed' }); } saveAllData(); renderHome(); }
-  function deleteTask(id) { if (!confirm('确定要删除这个任务吗？')) return; tasks = tasks.filter(t => t.id !== id); saveAllData(); renderHome(); showToast('已删除'); }
+  function deleteTask(id) { if (!confirm('确定要删除这个任务吗？')) return; tasks = tasks.filter(t => t.id !== id); delete taskReminders[id]; saveAllData(); renderHome(); showToast('已删除'); }
   function openUpdateModal(id) { editingTaskId = id; document.getElementById('updateText').value = ''; document.getElementById('updateStatus').value = 'progress'; document.getElementById('updateModal').classList.add('active'); }
   function saveUpdate() {
     const text = document.getElementById('updateText').value.trim();
@@ -648,6 +631,41 @@ const App = (function() {
     alert(`用户名：${isGuest ? '游客（临时）' : currentUser.username}\n类型：${isGuest ? '游客模式' : '注册用户'}\n总任务：${total} 项\n已完成：${done} 项\n完成率：${total > 0 ? Math.round(done/total*100) : 0}%`);
   }
   function exportData() { document.getElementById('userMenu').classList.remove('show'); backupData(); }
+  
+  // ===== 任务提醒 =====
+  function openTaskReminderModal(taskId) {
+    const task = tasks.find(t => t.id === taskId);
+    if (!task) return;
+    editingReminderTaskId = taskId;
+    const tr = taskReminders[taskId] || {};
+    document.getElementById('taskReminderName').textContent = task.text;
+    document.getElementById('taskReminderToggle').classList.toggle('active', !!tr.enabled);
+    document.getElementById('taskReminderTime').value = tr.time || '09:00';
+    document.getElementById('taskReminderRepeat').value = tr.repeat || 'once';
+    document.getElementById('taskReminderMail').checked = !!tr.mail;
+    document.getElementById('taskReminderModal').classList.add('active');
+  }
+  function toggleTaskReminderEnabled() {
+    document.getElementById('taskReminderToggle').classList.toggle('active');
+  }
+  function saveTaskReminder() {
+    const taskId = editingReminderTaskId;
+    if (!taskId) return;
+    const enabled = document.getElementById('taskReminderToggle').classList.contains('active');
+    const time = document.getElementById('taskReminderTime').value;
+    const repeat = document.getElementById('taskReminderRepeat').value;
+    const mail = document.getElementById('taskReminderMail').checked;
+    if (enabled && !time) { showToast('请选择提醒时间'); return; }
+    const reminder = { enabled, time: time || '09:00', repeat: repeat || 'once', mail };
+    if (repeat === 'once') { reminder.nextTrigger = new Date().toDateString(); }
+    else if (repeat === 'weekly') { reminder.dayOfWeek = new Date().getDay(); }
+    taskReminders[taskId] = enabled ? reminder : null;
+    saveAllData();
+    closeModal('taskReminderModal');
+    editingReminderTaskId = null;
+    renderHome();
+    showToast('提醒设置已保存');
+  }
   
   // ===== 周报 =====
   function renderWeekly() {
@@ -710,11 +728,6 @@ const App = (function() {
   function renderSettings() {
     const dn = currentUser && !currentUser.isGuest ? currentUser.username : '游客';
     document.getElementById('settingsUserName').textContent = dn;
-    document.getElementById('toggleMorning').classList.toggle('active', reminders.morning);
-    document.getElementById('toggleEvening').classList.toggle('active', reminders.evening);
-    document.getElementById('toggleWeekly').classList.toggle('active', reminders.weekly);
-    document.getElementById('toggleSunday').classList.toggle('active', reminders.sunday);
-    document.getElementById('customRemindersList').innerHTML = customReminders.map(r => { const repeatLabel = r.repeat === 'daily' ? '每天' : r.repeat === 'weekday' ? '工作日' : '一次'; return `<div class="reminder-item" style="margin-top:8px;"><span>⏰ ${r.time} (${repeatLabel}) ${r.mail ? '📧' : ''}</span><button class="btn btn-small btn-danger" onclick="App.deleteCustomReminder(${r.id})">删除</button></div>`; }).join('');
     const cats = getAllCategories();
     document.getElementById('categoryList').innerHTML = Object.entries(cats).map(([key, name]) => {
       const count = tasks.filter(t => t.category === key).length;
@@ -722,35 +735,69 @@ const App = (function() {
       return `<div class="category-item"><div style="display:flex;align-items:center;flex:1;"><span class="category-name" data-key="${key}" ondblclick="App.startEditCategoryName('${key}')">${name}</span><span class="category-count">（${count} 项）</span></div><div class="cat-actions">${isDefault ? '<span style="font-size:12px;color:#a0aec0;margin-right:8px;">默认</span>' : ''}<button class="btn btn-small btn-primary" onclick="App.openEditCategoryModal('${key}')" style="background:#4299e1;">✏️</button><button class="btn btn-small btn-danger" onclick="App.deleteCategory('${key}')">🗑️</button></div></div>`;
     }).join('');
   }
-  function toggleReminder(key) { reminders[key] = !reminders[key]; saveAllData(); renderSettings(); }
-  function addCustomReminder() { const time = document.getElementById('customTime').value, repeat = document.getElementById('customRepeat').value, mail = document.getElementById('customMail').checked; if (!time) { showToast('请选择时间'); return; } customReminders.push({ time, repeat, mail, id: Date.now() }); saveAllData(); renderSettings(); showToast('自定义提醒已添加'); }
-  function deleteCustomReminder(id) { customReminders = customReminders.filter(r => r.id !== id); saveAllData(); renderSettings(); }
   function addCustomCategory() { const name = document.getElementById('newCategoryInput').value.trim(); if (!name) { showToast('请输入分类名称'); return; } const cats = getAllCategories(); if (Object.values(cats).includes(name)) { showToast('该分类已存在'); return; } customCategories.push({ id: 'cat_' + Date.now(), name }); saveAllData(); document.getElementById('newCategoryInput').value = ''; renderSettings(); renderHome(); showToast('分类已添加'); }
   function startEditCategoryName(key) { const el = document.querySelector('.category-name[data-key="' + key + '"]'); if (!el) return; el.contentEditable = 'true'; el.focus(); const range = document.createRange(); range.selectNodeContents(el); const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range); el.onblur = function() { const newName = el.textContent.trim(); const oldName = getAllCategories()[key]; if (newName && newName !== oldName) { const cats = getAllCategories(); const exists = Object.entries(cats).some(([k, v]) => k !== key && v === newName); if (exists) { showToast('该名称已存在'); el.textContent = oldName; } else { if (CONFIG.DEFAULT_CATEGORIES[key]) { customCategories.push({ id: key, name: newName }); } else { const cat = customCategories.find(c => c.id === key); if (cat) cat.name = newName; } saveAllData(); renderSettings(); renderHome(); showToast('名称已修改'); } } else { el.textContent = oldName; } el.contentEditable = 'false'; }; el.onkeydown = function(e) { if (e.key === 'Enter') { e.preventDefault(); el.blur(); } else if (e.key === 'Escape') { el.textContent = getAllCategories()[key]; el.contentEditable = 'false'; } }; }
   function openEditCategoryModal(key) { editingCategoryId = key; const cats = getAllCategories(); document.getElementById('editCategoryInput').value = cats[key] || ''; document.getElementById('editCategoryModal').classList.add('active'); setTimeout(() => document.getElementById('editCategoryInput').focus(), 100); }
   function confirmEditCategory() { const newName = document.getElementById('editCategoryInput').value.trim(); if (!newName) { showToast('名称不能为空'); return; } const cats = getAllCategories(); if (cats[editingCategoryId] === newName) { closeModal('editCategoryModal'); return; } const exists = Object.entries(cats).some(([k, v]) => k !== editingCategoryId && v === newName); if (exists) { showToast('该名称已存在'); return; } if (CONFIG.DEFAULT_CATEGORIES[editingCategoryId]) { customCategories.push({ id: editingCategoryId, name: newName }); } else { const cat = customCategories.find(c => c.id === editingCategoryId); if (cat) cat.name = newName; } saveAllData(); renderSettings(); renderHome(); closeModal('editCategoryModal'); editingCategoryId = null; showToast('名称已修改'); }
   function deleteCategory(key) { const cats = getAllCategories(); const catName = cats[key]; if (!catName) return; if (key === 'general') { showToast('「一般事务」不能删除，它是所有任务的回退分类'); return; } const count = tasks.filter(t => t.category === key).length; const msg = count > 0 ? `「${catName}」下有 ${count} 个任务，删除后这些任务将归类为「一般事务」，确定删除吗？` : `确定删除分类「${catName}」吗？`; if (!confirm(msg)) return; tasks.forEach(t => { if (t.category === key) t.category = 'general'; }); if (!CONFIG.DEFAULT_CATEGORIES[key]) { customCategories = customCategories.filter(c => c.id !== key); } else { customCategories = customCategories.filter(c => c.id !== key); } saveAllData(); renderSettings(); renderHome(); showToast('分类已删除'); }
-  function backupData() { const data = { tasks, reminders, customReminders, customCategories, activeReminders, username: currentUser && !currentUser.isGuest ? currentUser.username : null, exportTime: new Date().toISOString(), version: '2.0' }; const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `工作排查备份_${new Date().toLocaleDateString('zh-CN')}.json`; link.click(); const info = document.getElementById('backupInfo'); if (info) info.textContent = `✅ 备份成功！${tasks.length} 个任务，${customCategories.length} 个分类`; showToast('数据已备份'); }
-  function restoreData(input) { const file = input.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = function(e) { try { const data = JSON.parse(e.target.result); if (data.tasks) tasks = data.tasks; if (data.reminders) reminders = data.reminders; if (data.customReminders) customReminders = data.customReminders; if (data.customCategories) customCategories = data.customCategories; if (data.activeReminders) activeReminders = data.activeReminders; saveAllData(); renderHome(); renderWeekly(); renderSettings(); renderReminders(); const info = document.getElementById('backupInfo'); if (info) info.textContent = `✅ 恢复成功！${tasks.length} 个任务已恢复`; showToast('数据恢复成功'); } catch(err) { showToast('文件格式错误'); } }; reader.readAsText(file); input.value = ''; }
+  function backupData() { const data = { tasks, taskReminders, customCategories, activeReminders, username: currentUser && !currentUser.isGuest ? currentUser.username : null, exportTime: new Date().toISOString(), version: '2.1' }; const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `工作排查备份_${new Date().toLocaleDateString('zh-CN')}.json`; link.click(); const info = document.getElementById('backupInfo'); if (info) info.textContent = `✅ 备份成功！${tasks.length} 个任务，${customCategories.length} 个分类`; showToast('数据已备份'); }
+  function restoreData(input) { const file = input.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = function(e) { try { const data = JSON.parse(e.target.result); if (data.tasks) tasks = data.tasks; if (data.taskReminders) taskReminders = data.taskReminders; if (data.customCategories) customCategories = data.customCategories; if (data.activeReminders) activeReminders = data.activeReminders; saveAllData(); renderHome(); renderWeekly(); renderSettings(); renderReminders(); const info = document.getElementById('backupInfo'); if (info) info.textContent = `✅ 恢复成功！${tasks.length} 个任务已恢复`; showToast('数据恢复成功'); } catch(err) { showToast('文件格式错误'); } }; reader.readAsText(file); input.value = ''; }
   
   // ===== 提醒检查 =====
   function startReminderCheck() { if (reminderTimer) clearInterval(reminderTimer); checkReminders(); reminderTimer = setInterval(checkReminders, 30000); }
   function checkReminders() {
-    const now = new Date(), hour = now.getHours(), minute = now.getMinutes(), day = now.getDay();
-    const minuteKey = `${hour}:${minute}`; if (checkedMinutes.has(minuteKey)) return; checkedMinutes.clear(); checkedMinutes.add(minuteKey);
-    let triggered = false;
-    if (reminders.morning && hour === 9 && minute === 0) { addActiveReminder('早上提醒', '今天有任务待办，记得更新进度！', '09:00'); triggered = true; }
-    if (reminders.evening && hour === 17 && minute === 0) { const pending = tasks.filter(t => !t.completed).length; addActiveReminder('下午检查', `还有 ${pending} 项任务未完成，进展如何？`, '17:00'); triggered = true; }
-    if (reminders.weekly && day === 5 && hour === 16 && minute === 0) { const done = tasks.filter(t => t.completed).length, total = tasks.length; addActiveReminder('周五汇总', `本周完成 ${done}/${total} 项任务，记得更新周报！`, '周五 16:00'); triggered = true; }
-    if (reminders.sunday && day === 0 && hour === 20 && minute === 0) { addActiveReminder('周日规划', '为下周做好准备，添加新的工作任务吧！', '周日 20:00'); triggered = true; }
+    const now = new Date();
+    const hour = now.getHours();
+    const minute = now.getMinutes();
+    const day = now.getDay();
+    const dateStr = now.toDateString();
     const timeStr = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
-    customReminders.forEach(r => { if (r.time === timeStr) { if (r.repeat === 'daily' || (r.repeat === 'weekday' && day >= 1 && day <= 5)) { addActiveReminder('自定义提醒', '该更新任务状态了！', r.time); if (r.mail) { const subject = encodeURIComponent('任务提醒'), body = encodeURIComponent(`⏰ 自定义提醒：${r.time}\n\n该更新任务状态了！\n\n来自：工作排查登记系统`); const btn = document.getElementById('reminderMailBtn'); btn.href = `mailto:?subject=${subject}&body=${body}`; btn.style.display = 'inline-block'; } else { document.getElementById('reminderMailBtn').style.display = 'none'; } triggered = true; } } });
-    if (triggered) { updateNavBadge(); showReminderPopup(); }
+    const minuteKey = `${dateStr} ${timeStr}`;
+    if (checkedMinuteKey === minuteKey) return;
+    checkedMinuteKey = minuteKey;
+    let triggered = false;
+    let lastMail = null;
+    tasks.forEach(task => {
+      const tr = taskReminders[task.id];
+      if (!tr || !tr.enabled) return;
+      if (tr.time !== timeStr) return;
+      let shouldTrigger = false;
+      let shouldClear = false;
+      if (tr.repeat === 'once') {
+        if (tr.nextTrigger === dateStr) { shouldTrigger = true; shouldClear = true; }
+      } else if (tr.repeat === 'daily') {
+        shouldTrigger = true;
+      } else if (tr.repeat === 'weekly') {
+        if (tr.dayOfWeek === day) { shouldTrigger = true; }
+      }
+      if (shouldTrigger) {
+        const title = `任务提醒: ${task.text}`;
+        const message = `任务「${task.text}」${TYPE_MAP[task.type] || task.type}任务，记得处理！`;
+        addActiveReminder(title, message, timeStr);
+        if (tr.mail) { lastMail = { title: `任务提醒: ${task.text}`, text: task.text }; }
+        triggered = true;
+        if (shouldClear) { taskReminders[task.id] = null; saveAllData(); }
+      }
+    });
+    if (triggered) {
+      const mailBtn = document.getElementById('reminderMailBtn');
+      if (lastMail) {
+        const subject = encodeURIComponent(lastMail.title);
+        const body = encodeURIComponent(`⏰ ${lastMail.title}\n\n任务「${lastMail.text}」需要处理，请及时跟进！\n\n来自：工作排查登记系统`);
+        mailBtn.href = `mailto:?subject=${subject}&body=${body}`;
+        mailBtn.style.display = 'inline-block';
+      } else {
+        mailBtn.style.display = 'none';
+      }
+      updateNavBadge();
+      showReminderPopup();
+    }
   }
   function addActiveReminder(title, message, time) {
-    const exists = activeReminders.some(r => r.title === title && r.time === time);
+    const dateStr = new Date().toDateString();
+    const exists = activeReminders.some(r => r.title === title && r.time === time && r.date === dateStr);
     if (exists) return;
-    activeReminders.push({ id: Date.now(), title, message, time, created: new Date().toISOString() });
+    activeReminders.push({ id: Date.now(), title, message, time, date: dateStr, created: new Date().toISOString() });
     saveAllData();
   }
   function showReminderPopup() { const popup = document.getElementById('reminderPopup'); const latest = activeReminders[activeReminders.length - 1]; if (!latest) return; document.getElementById('reminderPopupText').textContent = latest.message; popup.classList.add('active'); setTimeout(() => popup.classList.remove('active'), 5000); }
@@ -769,9 +816,9 @@ const App = (function() {
     toggleUserMenu, showUserInfo, exportData,
     exportExcel, exportPDF,
     dismissActiveReminder,
-    toggleReminder, addCustomReminder, deleteCustomReminder, addCustomCategory,
-    startEditCategoryName, openEditCategoryModal, confirmEditCategory, deleteCategory,
+    addCustomCategory, startEditCategoryName, openEditCategoryModal, confirmEditCategory, deleteCategory,
     backupData, restoreData,
+    openTaskReminderModal, toggleTaskReminderEnabled, saveTaskReminder,
     dismissReminder, closeModal
   };
 })();
