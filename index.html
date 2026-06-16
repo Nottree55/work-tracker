@@ -32,7 +32,6 @@ body { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Ro
 .btn-danger { background: #fc8181; color: white; }
 .btn-warning { background: #ed8936; color: white; }
 .btn-add { background: #805ad5; color: white; }
-.btn-ghost { background: transparent; border: 2px solid #e8ecf1; color: #718096; }
 .btn-small { padding: 6px 12px; font-size: 13px; border-radius: 8px; }
 .guest-link { text-align: center; margin-top: 20px; color: #667eea; font-size: 14px; cursor: pointer; text-decoration: underline; }
 .auth-error { color: #e53e3e; font-size: 13px; margin-bottom: 12px; display: none; }
@@ -185,16 +184,16 @@ select { background: white; cursor: pointer; }
 /* 邮件选项 */
 .mail-option { display: flex; align-items: center; gap: 8px; margin-top: 8px; padding: 8px; background: #f7fafc; border-radius: 8px; }
 .mail-option input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; }
-
 </style>
 </head>
 <body>
 <div class="toast" id="toast"></div>
+
 <div class="reminder-popup" id="reminderPopup">
   <div style="font-weight:600;color:#667eea;margin-bottom:8px;">⏰ 任务提醒</div>
   <div id="reminderPopupText" style="font-size:14px;color:#4a5568;margin-bottom:12px;"></div>
   <div style="display:flex;gap:8px;">
-    <button class="btn btn-small btn-primary" onclick="dismissReminder()">知道了</button>
+    <button class="btn btn-small btn-primary" onclick="App.dismissReminder()">知道了</button>
     <a class="btn btn-small mail-btn" id="reminderMailBtn" href="#" target="_blank">📧 邮件</a>
   </div>
 </div>
@@ -204,24 +203,24 @@ select { background: white; cursor: pointer; }
     <div class="auth-title">📋 工作排查登记</div>
     <div class="auth-subtitle">多用户任务管理系统</div>
     <div class="auth-tabs">
-      <div class="auth-tab active" onclick="switchAuthTab('login')">登录</div>
-      <div class="auth-tab" onclick="switchAuthTab('register')">注册</div>
+      <div class="auth-tab active" onclick="App.switchAuthTab('login')">登录</div>
+      <div class="auth-tab" onclick="App.switchAuthTab('register')">注册</div>
     </div>
     <div id="loginForm" class="auth-form active">
-      <div class="form-group"><label>用户名</label><input type="text" id="loginUsername" placeholder="输入用户名" onkeydown="if(event.key==='Enter')handleLogin()"></div>
-      <div class="form-group"><label>密码</label><input type="password" id="loginPassword" placeholder="输入密码" onkeydown="if(event.key==='Enter')handleLogin()"></div>
+      <div class="form-group"><label>用户名</label><input type="text" id="loginUsername" placeholder="输入用户名" onkeydown="if(event.key==='Enter')App.handleLogin()"></div>
+      <div class="form-group"><label>密码</label><input type="password" id="loginPassword" placeholder="输入密码" onkeydown="if(event.key==='Enter')App.handleLogin()"></div>
       <div class="auth-error" id="loginError"></div>
-      <button class="btn btn-primary btn-block" onclick="handleLogin()">🔐 登录</button>
-      <div class="import-hint"><span>换设备？先</span><a onclick="document.getElementById('importFileLogin').click()">导入数据</a><input type="file" id="importFileLogin" style="display:none" accept=".json" onchange="handleImportOnLogin(this)"></div>
+      <button class="btn btn-primary btn-block" onclick="App.handleLogin()">🔐 登录</button>
+      <div class="import-hint"><span>换设备？先</span><a onclick="document.getElementById('importFileLogin').click()">导入数据</a><input type="file" id="importFileLogin" style="display:none" accept=".json" onchange="App.handleImportOnLogin(this)"></div>
     </div>
     <div id="registerForm" class="auth-form">
-      <div class="form-group"><label>用户名</label><input type="text" id="registerUsername" placeholder="设置用户名（3-20位）" onkeydown="if(event.key==='Enter')handleRegister()"></div>
-      <div class="form-group"><label>密码</label><input type="password" id="registerPassword" placeholder="设置密码（至少6位）" onkeydown="if(event.key==='Enter')handleRegister()"></div>
-      <div class="form-group"><label>确认密码</label><input type="password" id="registerConfirm" placeholder="再次输入密码" onkeydown="if(event.key==='Enter')handleRegister()"></div>
+      <div class="form-group"><label>用户名</label><input type="text" id="registerUsername" placeholder="设置用户名（3-20位）" onkeydown="if(event.key==='Enter')App.handleRegister()"></div>
+      <div class="form-group"><label>密码</label><input type="password" id="registerPassword" placeholder="设置密码（至少6位）" onkeydown="if(event.key==='Enter')App.handleRegister()"></div>
+      <div class="form-group"><label>确认密码</label><input type="password" id="registerConfirm" placeholder="再次输入密码" onkeydown="if(event.key==='Enter')App.handleRegister()"></div>
       <div class="auth-error" id="registerError"></div>
-      <button class="btn btn-success btn-block" onclick="handleRegister()">📝 注册账号</button>
+      <button class="btn btn-success btn-block" onclick="App.handleRegister()">📝 注册账号</button>
     </div>
-    <div class="guest-link" onclick="guestLogin()">👤 暂不登录，游客模式进入</div>
+    <div class="guest-link" onclick="App.guestLogin()">👤 暂不登录，游客模式进入</div>
   </div>
 </div>
 
@@ -231,13 +230,13 @@ select { background: white; cursor: pointer; }
       <div class="header-gradient">
         <div class="header-top">
           <div class="header-title">📋 工作排查登记</div>
-          <div class="header-user" onclick="toggleUserMenu()">
+          <div class="header-user" onclick="App.toggleUserMenu()">
             <span id="homeUserName">游客</span>
             <div class="user-menu" id="userMenu">
-              <div class="user-menu-item" onclick="showUserInfo()">👤 账号信息</div>
-              <div class="user-menu-item" onclick="exportData()">📥 导出数据</div>
+              <div class="user-menu-item" onclick="App.showUserInfo()">👤 账号信息</div>
+              <div class="user-menu-item" onclick="App.exportData()">📥 导出数据</div>
               <div class="user-menu-divider"></div>
-              <div class="user-menu-item" onclick="logout()" style="color:#e53e3e">🚪 退出登录</div>
+              <div class="user-menu-item" onclick="App.logout()" style="color:#e53e3e">🚪 退出登录</div>
             </div>
           </div>
         </div>
@@ -251,10 +250,10 @@ select { background: white; cursor: pointer; }
       </div>
       <div class="container">
         <div class="card">
-          <div class="input-group"><input type="text" class="input" id="taskInput" placeholder="输入新任务..." style="flex:2;" onkeydown="if(event.key==='Enter')addTask()"><select id="taskType" style="flex:0 0 100px;"><option value="daily">每日</option><option value="weekly">每周</option><option value="urgent">紧急</option></select></div>
-          <div class="input-group"><select id="taskCategory" style="flex:1;"></select><button class="btn btn-add btn-small" onclick="openCategoryModal()" style="flex:0 0 auto;">➕</button></div>
-          <div class="input-group"><input type="text" class="input" id="taskTag" placeholder="标签（可选）" onkeydown="if(event.key==='Enter')addTask()"></div>
-          <button class="btn btn-primary btn-block" onclick="addTask()">➕ 添加任务</button>
+          <div class="input-group"><input type="text" class="input" id="taskInput" placeholder="输入新任务..." style="flex:2;" onkeydown="if(event.key==='Enter')App.addTask()"><select id="taskType" style="flex:0 0 100px;"><option value="daily">每日</option><option value="weekly">每周</option><option value="urgent">紧急</option></select></div>
+          <div class="input-group"><select id="taskCategory" style="flex:1;"></select><button class="btn btn-add btn-small" onclick="App.openCategoryModal()" style="flex:0 0 auto;">➕</button></div>
+          <div class="input-group"><input type="text" class="input" id="taskTag" placeholder="标签（可选）" onkeydown="if(event.key==='Enter')App.addTask()"></div>
+          <button class="btn btn-primary btn-block" onclick="App.addTask()">➕ 添加任务</button>
         </div>
         <div class="filter-bar" id="filterBar"></div>
         <div id="taskList"></div>
@@ -271,7 +270,7 @@ select { background: white; cursor: pointer; }
       </div>
       <div class="container">
         <div class="card"><div class="section-title">📅 本周任务分布</div><div class="week-grid" id="weekGrid"></div></div>
-        <div class="card"><div class="section-title">📈 完成情况统计</div><div id="weeklyStats" style="font-size:15px;line-height:2;"></div><div style="margin-top:16px;display:flex;gap:10px;"><button class="btn btn-primary" style="flex:1;" onclick="exportExcel()">📊 导出 Excel</button><button class="btn btn-primary" style="flex:1;background:#764ba2;" onclick="exportPDF()">📄 打印 PDF</button></div></div>
+        <div class="card"><div class="section-title">📈 完成情况统计</div><div id="weeklyStats" style="font-size:15px;line-height:2;"></div><div style="margin-top:16px;display:flex;gap:10px;"><button class="btn btn-primary" style="flex:1;" onclick="App.exportExcel()">📊 导出 Excel</button><button class="btn btn-primary" style="flex:1;background:#764ba2;" onclick="App.exportPDF()">📄 打印 PDF</button></div></div>
         <div class="card"><div class="section-title">📋 分类统计</div><div id="categoryStats" style="font-size:15px;line-height:2;"></div></div>
       </div>
     </div>
@@ -292,31 +291,31 @@ select { background: white; cursor: pointer; }
       <div class="container">
         <div class="card">
           <div class="section-title">🔔 每日提醒</div>
-          <div class="reminder-item"><span>早上 9:00 - 更新任务状态</span><div class="toggle-switch" id="toggleMorning" onclick="toggleReminder('morning')"></div></div>
-          <div class="reminder-item"><span>下午 17:00 - 检查进度</span><div class="toggle-switch" id="toggleEvening" onclick="toggleReminder('evening')"></div></div>
+          <div class="reminder-item"><span>早上 9:00 - 更新任务状态</span><div class="toggle-switch" id="toggleMorning" onclick="App.toggleReminder('morning')"></div></div>
+          <div class="reminder-item"><span>下午 17:00 - 检查进度</span><div class="toggle-switch" id="toggleEvening" onclick="App.toggleReminder('evening')"></div></div>
         </div>
         <div class="card">
           <div class="section-title">📅 每周提醒</div>
-          <div class="reminder-item"><span>周五 16:00 - 周汇总提醒</span><div class="toggle-switch" id="toggleWeekly" onclick="toggleReminder('weekly')"></div></div>
-          <div class="reminder-item"><span>周日 20:00 - 下周规划</span><div class="toggle-switch" id="toggleSunday" onclick="toggleReminder('sunday')"></div></div>
+          <div class="reminder-item"><span>周五 16:00 - 周汇总提醒</span><div class="toggle-switch" id="toggleWeekly" onclick="App.toggleReminder('weekly')"></div></div>
+          <div class="reminder-item"><span>周日 20:00 - 下周规划</span><div class="toggle-switch" id="toggleSunday" onclick="App.toggleReminder('sunday')"></div></div>
         </div>
         <div class="card">
           <div class="section-title">📝 自定义提醒</div>
           <div class="input-group"><input type="time" class="input" id="customTime" style="flex:0 0 120px;"><select id="customRepeat" style="flex:1;"><option value="daily">每天</option><option value="weekday">工作日</option><option value="once">一次</option></select></div>
           <div class="mail-option"><input type="checkbox" id="customMail" checked><label for="customMail" style="font-size:13px;color:#4a5568;cursor:pointer;">同时发送邮件提醒</label></div>
-          <button class="btn btn-primary btn-block" onclick="addCustomReminder()" style="margin-top:10px;">添加自定义提醒</button>
+          <button class="btn btn-primary btn-block" onclick="App.addCustomReminder()" style="margin-top:10px;">添加自定义提醒</button>
           <div id="customRemindersList" style="margin-top:16px;"></div>
         </div>
         <div class="card">
           <div class="section-title">🏷️ 分类管理</div>
           <div class="hint">💡 提示：双击自定义分类名称可直接修改</div>
-          <div class="input-group" style="margin-bottom:16px;"><input type="text" class="input" id="newCategoryInput" placeholder="输入新分类名称..." onkeydown="if(event.key==='Enter')addCustomCategory()"><button class="btn btn-add" onclick="addCustomCategory()" style="flex:0 0 auto;">添加</button></div>
+          <div class="input-group" style="margin-bottom:16px;"><input type="text" class="input" id="newCategoryInput" placeholder="输入新分类名称..." onkeydown="if(event.key==='Enter')App.addCustomCategory()"><button class="btn btn-add" onclick="App.addCustomCategory()" style="flex:0 0 auto;">添加</button></div>
           <div class="category-list" id="categoryList"></div>
         </div>
         <div class="card">
           <div class="section-title">💾 数据管理</div>
-          <div style="display:flex;gap:10px;margin-top:10px;"><button class="btn btn-primary" style="flex:1;background:#48bb78;" onclick="backupData()">📥 备份数据</button><button class="btn btn-primary" style="flex:1;background:#ed8936;" onclick="document.getElementById('restoreInput').click()">📤 恢复数据</button></div>
-          <input type="file" id="restoreInput" style="display:none" accept=".json" onchange="restoreData(this)">
+          <div style="display:flex;gap:10px;margin-top:10px;"><button class="btn btn-primary" style="flex:1;background:#48bb78;" onclick="App.backupData()">📥 备份数据</button><button class="btn btn-primary" style="flex:1;background:#ed8936;" onclick="document.getElementById('restoreInput').click()">📤 恢复数据</button></div>
+          <input type="file" id="restoreInput" style="display:none" accept=".json" onchange="App.restoreData(this)">
           <div style="margin-top:10px;font-size:13px;color:#718096;" id="backupInfo"></div>
         </div>
       </div>
@@ -324,96 +323,458 @@ select { background: white; cursor: pointer; }
   </div>
 
   <div class="bottom-nav">
-    <div class="nav-item active" data-tab="home" onclick="switchTab('home')"><span class="nav-icon">📝</span><span>任务</span></div>
-    <div class="nav-item" data-tab="weekly" onclick="switchTab('weekly')"><span class="nav-icon">📊</span><span>周报</span></div>
-    <div class="nav-item" data-tab="reminders" onclick="switchTab('reminders')"><span class="nav-icon">🔔</span><span>提醒</span><span class="nav-badge" id="navBadge" style="display:none;">0</span></div>
-    <div class="nav-item" data-tab="settings" onclick="switchTab('settings')"><span class="nav-icon">⚙️</span><span>设置</span></div>
+    <div class="nav-item active" data-tab="home" onclick="App.switchTab('home')"><span class="nav-icon">📝</span><span>任务</span></div>
+    <div class="nav-item" data-tab="weekly" onclick="App.switchTab('weekly')"><span class="nav-icon">📊</span><span>周报</span></div>
+    <div class="nav-item" data-tab="reminders" onclick="App.switchTab('reminders')"><span class="nav-icon">🔔</span><span>提醒</span><span class="nav-badge" id="navBadge" style="display:none;">0</span></div>
+    <div class="nav-item" data-tab="settings" onclick="App.switchTab('settings')"><span class="nav-icon">⚙️</span><span>设置</span></div>
   </div>
 </div>
 
-<div class="modal-overlay" id="categoryModal" onclick="closeModal('categoryModal')"><div class="modal-card" onclick="event.stopPropagation()"><div class="modal-header"><div class="modal-title">➕ 添加自定义分类</div><div class="modal-close" onclick="closeModal('categoryModal')">×</div></div><div class="form-group"><label>分类名称</label><input type="text" class="input" id="categoryModalInput" placeholder="例如：消防工程、智能化..." onkeydown="if(event.key==='Enter')confirmAddCategory()"></div><button class="btn btn-primary btn-block" onclick="confirmAddCategory()">确认添加</button></div></div>
-<div class="modal-overlay" id="updateModal" onclick="closeModal('updateModal')"><div class="modal-card" onclick="event.stopPropagation()"><div class="modal-header"><div class="modal-title">🔄 更新任务进度</div><div class="modal-close" onclick="closeModal('updateModal')">×</div></div><div class="form-group"><label>进度更新</label><textarea class="input" id="updateText" placeholder="记录今天的进展..." style="min-height:100px;resize:vertical;"></textarea></div><div class="form-group"><label>状态</label><select id="updateStatus" class="input"><option value="progress">进行中</option><option value="completed">已完成</option><option value="blocked">受阻/需协助</option></select></div><button class="btn btn-primary btn-block" onclick="saveUpdate()">保存更新</button></div></div>
-<div class="modal-overlay" id="editCategoryModal" onclick="closeModal('editCategoryModal')"><div class="modal-card" onclick="event.stopPropagation()"><div class="modal-header"><div class="modal-title">✏️ 修改分类名称</div><div class="modal-close" onclick="closeModal('editCategoryModal')">×</div></div><div class="form-group"><label>新名称</label><input type="text" class="input" id="editCategoryInput" placeholder="输入新名称" onkeydown="if(event.key==='Enter')confirmEditCategory()"></div><button class="btn btn-primary btn-block" onclick="confirmEditCategory()">确认修改</button></div></div>
+<div class="modal-overlay" id="categoryModal" onclick="App.closeModal('categoryModal')"><div class="modal-card" onclick="event.stopPropagation()"><div class="modal-header"><div class="modal-title">➕ 添加自定义分类</div><div class="modal-close" onclick="App.closeModal('categoryModal')">×</div></div><div class="form-group"><label>分类名称</label><input type="text" class="input" id="categoryModalInput" placeholder="例如：消防工程、智能化..." onkeydown="if(event.key==='Enter')App.confirmAddCategory()"></div><button class="btn btn-primary btn-block" onclick="App.confirmAddCategory()">确认添加</button></div></div>
+<div class="modal-overlay" id="updateModal" onclick="App.closeModal('updateModal')"><div class="modal-card" onclick="event.stopPropagation()"><div class="modal-header"><div class="modal-title">🔄 更新任务进度</div><div class="modal-close" onclick="App.closeModal('updateModal')">×</div></div><div class="form-group"><label>进度更新</label><textarea class="input" id="updateText" placeholder="记录今天的进展..." style="min-height:100px;resize:vertical;"></textarea></div><div class="form-group"><label>状态</label><select id="updateStatus" class="input"><option value="progress">进行中</option><option value="completed">已完成</option><option value="blocked">受阻/需协助</option></select></div><button class="btn btn-primary btn-block" onclick="App.saveUpdate()">保存更新</button></div></div>
+<div class="modal-overlay" id="editCategoryModal" onclick="App.closeModal('editCategoryModal')"><div class="modal-card" onclick="event.stopPropagation()"><div class="modal-header"><div class="modal-title">✏️ 修改分类名称</div><div class="modal-close" onclick="App.closeModal('editCategoryModal')">×</div></div><div class="form-group"><label>新名称</label><input type="text" class="input" id="editCategoryInput" placeholder="输入新名称" onkeydown="if(event.key==='Enter')App.confirmEditCategory()"></div><button class="btn btn-primary btn-block" onclick="App.confirmEditCategory()">确认修改</button></div></div>
 
 <script>
-(function(){
-'use strict';
-const CONFIG={STORAGE_USERS:'workTrackerUsers',STORAGE_SESSION:'workTrackerCurrentUser',PREFIX_DATA:'workTracker_data_',DEFAULT_CATEGORIES:{general:'一般事务',mechanical:'机电工程',design:'设计管理',site:'现场协调',doc:'文档审批',meeting:'会议沟通'}};
-const TYPE_MAP={daily:'每日',weekly:'每周',urgent:'紧急'};
-let currentUser=null,tasks=[],reminders={morning:true,evening:true,weekly:false,sunday:false},customReminders=[],customCategories=[],activeReminders=[],currentFilter='all',editingTaskId=null,editingCategoryId=null,checkedMinutes=new Set();
-
-function getUsersDB(){try{return JSON.parse(localStorage.getItem(CONFIG.STORAGE_USERS))||{}}catch(e){return{}}}
-function saveUsersDB(db){localStorage.setItem(CONFIG.STORAGE_USERS,JSON.stringify(db))}
-function getUserDataKey(u){return CONFIG.PREFIX_DATA+u}
-function getUserData(username){try{const d=JSON.parse(localStorage.getItem(getUserDataKey(username)))||{};return{tasks:d.tasks||[],reminders:d.reminders||{morning:true,evening:true,weekly:false,sunday:false},customReminders:d.customReminders||[],customCategories:d.customCategories||[],activeReminders:d.activeReminders||[]}}catch(e){return{tasks:[],reminders:{morning:true,evening:true,weekly:false,sunday:false},customReminders:[],customCategories:[],activeReminders:[]}}}
-function saveUserData(username,data){localStorage.setItem(getUserDataKey(username),JSON.stringify(data))}
-function saveAllData(){if(!currentUser||currentUser.isGuest)return;saveUserData(currentUser.username,{tasks,reminders,customReminders,customCategories,activeReminders})}
-function loadAllData(){if(!currentUser)return;if(currentUser.isGuest){tasks=[];reminders={morning:true,evening:true,weekly:false,sunday:false};customReminders=[];customCategories=[];activeReminders=[]}else{const d=getUserData(currentUser.username);tasks=d.tasks;reminders=d.reminders;customReminders=d.customReminders;customCategories=d.customCategories;activeReminders=d.activeReminders||[]}}
-function getAllCategories(){const c={};customCategories.forEach(x=>c[x.id]=x.name);return{...CONFIG.DEFAULT_CATEGORIES,...c}}
-function checkAutoLogin(){const s=localStorage.getItem(CONFIG.STORAGE_SESSION);if(!s)return;try{const u=JSON.parse(s);if(u.isGuest){localStorage.removeItem(CONFIG.STORAGE_SESSION);return}const db=getUsersDB();if(db[u.username]){currentUser=u;loadAllData()}}catch(e){localStorage.removeItem(CONFIG.STORAGE_SESSION)}}
-function showAuth(){document.getElementById('authPage').classList.remove('hidden');document.getElementById('appPage').classList.add('hidden')}
-function showApp(){document.getElementById('authPage').classList.add('hidden');document.getElementById('appPage').classList.remove('hidden');switchTab('home');startReminderCheck()}
-function init(){checkAutoLogin();if(currentUser)showApp();else showAuth()}
-
-window.switchAuthTab=function(tab){document.querySelectorAll('.auth-tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.auth-form').forEach(f=>f.classList.remove('active'));event.target.classList.add('active');document.getElementById(tab+'Form').classList.add('active');document.querySelectorAll('.auth-error').forEach(e=>e.classList.remove('show'))};
-window.handleLogin=function(){const u=document.getElementById('loginUsername').value.trim(),p=document.getElementById('loginPassword').value,db=getUsersDB();if(!db[u]||db[u].password!==p){showError('loginError','用户名或密码错误');return}currentUser={username:u,isGuest:false};localStorage.setItem(CONFIG.STORAGE_SESSION,JSON.stringify(currentUser));loadAllData();showApp();showToast('登录成功')};
-window.handleRegister=function(){const u=document.getElementById('registerUsername').value.trim(),p=document.getElementById('registerPassword').value,c=document.getElementById('registerConfirm').value;if(!u||u.length<3||u.length>20){showError('registerError','用户名需3-20位');return}if(p.length<6){showError('registerError','密码至少6位');return}if(p!==c){showError('registerError','两次密码不一致');return}const db=getUsersDB();if(db[u]){showError('registerError','用户名已存在');return}db[u]={password:p,created:new Date().toISOString()};saveUsersDB(db);saveUserData(u,{tasks:[],reminders:{morning:true,evening:true,weekly:false,sunday:false},customReminders:[],customCategories:[],activeReminders:[]});showToast('注册成功！请登录');document.querySelectorAll('.auth-tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.auth-form').forEach(f=>f.classList.remove('active'));document.querySelector('.auth-tabs .auth-tab:first-child').classList.add('active');document.getElementById('loginForm').classList.add('active');document.getElementById('loginUsername').value=u;document.getElementById('registerError').classList.remove('show')};
-window.guestLogin=function(){currentUser={username:'guest_'+Date.now(),isGuest:true};loadAllData();showApp();showToast('游客模式')};
-window.handleImportOnLogin=function(input){const file=input.files[0];if(!file)return;const reader=new FileReader();reader.onload=function(e){try{const data=JSON.parse(e.target.result);if(!data.tasks){showToast('文件格式错误');return}const username=data.username||'imported_'+Date.now(),db=getUsersDB();if(!db[username]){db[username]={password:'imported',created:new Date().toISOString()};saveUsersDB(db)}saveUserData(username,{tasks:data.tasks||[],reminders:data.reminders||{morning:true,evening:true,weekly:false,sunday:false},customReminders:data.customReminders||[],customCategories:data.customCategories||[],activeReminders:data.activeReminders||[]});currentUser={username:username,isGuest:false};localStorage.setItem(CONFIG.STORAGE_SESSION,JSON.stringify(currentUser));loadAllData();showApp();showToast('数据导入成功')}catch(err){showToast('文件格式错误')}};reader.readAsText(file);input.value=''};
-window.logout=function(){if(!confirm('确定要退出吗？未保存的数据将丢失'))return;currentUser=null;localStorage.removeItem(CONFIG.STORAGE_SESSION);location.reload()};
-
-window.switchTab=function(tab){saveAllData();document.querySelectorAll('.tab-page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));document.getElementById(tab+'Tab').classList.add('active');document.querySelector('.nav-item[data-tab="'+tab+'"]').classList.add('active');if(tab==='home')renderHome();else if(tab==='weekly')renderWeekly();else if(tab==='reminders')renderReminders();else if(tab==='settings')renderSettings();window.scrollTo(0,0)};
-
-function renderHome(){const dn=currentUser&&!currentUser.isGuest?currentUser.username:'游客';document.getElementById('homeUserName').textContent=dn;const now=new Date(),ws=new Date(now);ws.setDate(now.getDate()-now.getDay()+1);const we=new Date(ws);we.setDate(ws.getDate()+6);document.getElementById('homeWeekInfo').textContent=`${ws.getMonth()+1}月${ws.getDate()}日 - ${we.getMonth()+1}月${we.getDate()}日`;const total=tasks.length,done=tasks.filter(t=>t.completed).length,urgent=tasks.filter(t=>t.type==='urgent'&&!t.completed).length;document.getElementById('statTotal').textContent=total;document.getElementById('statDone').textContent=done;document.getElementById('statPending').textContent=total-done;document.getElementById('statUrgent').textContent=urgent;const cats=getAllCategories();const catSelect=document.getElementById('taskCategory');catSelect.innerHTML=Object.entries(cats).map(([k,v])=>`<option value="${k}">${v}</option>`).join('');let fb=`<button class="filter-btn ${currentFilter==='all'?'active':''}" onclick="setFilter('all')">全部</button><button class="filter-btn ${currentFilter==='pending'?'active':''}" onclick="setFilter('pending')">待办</button><button class="filter-btn ${currentFilter==='completed'?'active':''}" onclick="setFilter('completed')">已完成</button><button class="filter-btn ${currentFilter==='urgent'?'active':''}" onclick="setFilter('urgent')">紧急</button>`;Object.entries(cats).forEach(([k,v])=>{if(k!=='general')fb+=`<button class="filter-btn ${currentFilter===k?'active':''}" onclick="setFilter('${k}')">${v}</button>`});document.getElementById('filterBar').innerHTML=fb;let filtered=tasks;if(currentFilter==='pending')filtered=tasks.filter(t=>!t.completed);else if(currentFilter==='completed')filtered=tasks.filter(t=>t.completed);else if(currentFilter==='urgent')filtered=tasks.filter(t=>t.type==='urgent');else if(currentFilter!=='all')filtered=tasks.filter(t=>t.category===currentFilter);const sorted=[...filtered].sort((a,b)=>{if(a.completed!==b.completed)return a.completed?1:-1;if(a.type==='urgent'&&b.type!=='urgent')return-1;if(b.type==='urgent'&&a.type!=='urgent')return 1;return new Date(b.created)-new Date(a.created)});const listEl=document.getElementById('taskList');if(sorted.length===0){listEl.innerHTML='';document.getElementById('emptyState').style.display='block';return}document.getElementById('emptyState').style.display='none';listEl.innerHTML=sorted.map(task=>{const date=new Date(task.created),dateStr=`${date.getMonth()+1}/${date.getDate()} ${date.getHours()}:${String(date.getMinutes()).padStart(2,'0')}`;const updates=task.updates||[];const updateLogs=updates.slice(-3).map(u=>{const d=new Date(u.time);const icon=u.status==='completed'?'✅':u.status==='blocked'?'⚠️':'🔄';return`<div class="update-entry">${icon} ${d.getMonth()+1}/${d.getDate()} ${d.getHours()}:${String(d.getMinutes()).padStart(2,'0')} - ${u.text}</div>`}).join('');return`<div class="task-card ${task.completed?'completed':''} ${task.type==='urgent'&&!task.completed?'urgent':''}"><div class="task-header"><span class="task-title" id="taskTitle-${task.id}" ondblclick="startEditTaskName(${task.id})">${escapeHtml(task.text)}</span><div style="display:flex;gap:4px;flex-wrap:wrap;"><span class="tag ${task.type==='daily'?'tag-daily':task.type==='weekly'?'tag-weekly':'tag-urgent'}">${TYPE_MAP[task.type]}</span><span class="tag tag-category">${cats[task.category]||'一般'}</span>${task.tag?`<span class="tag tag-user">#${escapeHtml(task.tag)}</span>`:''}</div></div><div class="task-meta"><span>📅 ${dateStr}</span>${task.completed?'<span class="tag tag-completed">已完成</span>':''}</div>${updateLogs?`<div class="update-log">${updateLogs}</div>`:''}<div class="task-actions"><button class="btn btn-small btn-success" onclick="openUpdateModal(${task.id})">🔄 更新</button><button class="btn btn-small ${task.completed?'btn-warning':'btn-success'}" onclick="toggleComplete(${task.id})">${task.completed?'↩️ 恢复':'✅ 完成'}</button><button class="btn btn-small btn-danger" onclick="deleteTask(${task.id})">🗑️ 删除</button></div></div>`}).join('')}
-
-window.setFilter=function(filter){currentFilter=filter;renderHome()};
-window.addTask=function(){const text=document.getElementById('taskInput').value.trim();if(!text){showToast('请输入任务内容');return}const task={id:Date.now(),text:text,type:document.getElementById('taskType').value,category:document.getElementById('taskCategory').value,tag:document.getElementById('taskTag').value.trim(),created:new Date().toISOString(),completed:false,updates:[]};tasks.unshift(task);saveAllData();document.getElementById('taskInput').value='';document.getElementById('taskTag').value='';renderHome();showToast('任务已添加')};
-window.startEditTaskName=function(id){const task=tasks.find(t=>t.id===id);if(!task)return;const el=document.getElementById('taskTitle-'+id);el.contentEditable='true';el.focus();const range=document.createRange();range.selectNodeContents(el);const sel=window.getSelection();sel.removeAllRanges();sel.addRange(range);el.onblur=function(){const newName=el.textContent.trim();if(newName&&newName!==task.text){task.text=newName;saveAllData();showToast('任务名称已修改')}el.contentEditable='false';renderHome()};el.onkeydown=function(e){if(e.key==='Enter'){e.preventDefault();el.blur()}else if(e.key==='Escape'){el.textContent=task.text;el.contentEditable='false'}}};
-window.toggleComplete=function(id){const task=tasks.find(t=>t.id===id);if(!task)return;task.completed=!task.completed;if(task.completed){task.updates=task.updates||[];task.updates.push({time:new Date().toISOString(),text:'标记为完成',status:'completed'})}saveAllData();renderHome()};
-window.deleteTask=function(id){if(!confirm('确定要删除这个任务吗？'))return;tasks=tasks.filter(t=>t.id!==id);saveAllData();renderHome();showToast('已删除')};
-window.openUpdateModal=function(id){editingTaskId=id;document.getElementById('updateText').value='';document.getElementById('updateStatus').value='progress';document.getElementById('updateModal').classList.add('active')};
-window.saveUpdate=function(){const text=document.getElementById('updateText').value.trim();if(!text){showToast('请输入更新内容');return}const task=tasks.find(t=>t.id===editingTaskId);if(!task)return;task.updates=task.updates||[];const status=document.getElementById('updateStatus').value;task.updates.push({time:new Date().toISOString(),text:text,status:status});if(status==='completed')task.completed=true;saveAllData();closeModal('updateModal');editingTaskId=null;renderHome();showToast('任务已更新')};
-window.openCategoryModal=function(){document.getElementById('categoryModalInput').value='';document.getElementById('categoryModal').classList.add('active');setTimeout(()=>document.getElementById('categoryModalInput').focus(),100)};
-window.confirmAddCategory=function(){const name=document.getElementById('categoryModalInput').value.trim();if(!name){showToast('请输入分类名称');return}const cats=getAllCategories();if(Object.values(cats).includes(name)){showToast('该分类已存在');return}customCategories.push({id:'cat_'+Date.now(),name});saveAllData();renderHome();closeModal('categoryModal');showToast('分类已添加')};
-window.toggleUserMenu=function(){document.getElementById('userMenu').classList.toggle('show')};
-window.showUserInfo=function(){document.getElementById('userMenu').classList.remove('show');const total=tasks.length,done=tasks.filter(t=>t.completed).length,isGuest=currentUser&&currentUser.isGuest;alert(`用户名：${isGuest?'游客（临时）':currentUser.username}\n类型：${isGuest?'游客模式':'注册用户'}\n总任务：${total} 项\n已完成：${done} 项\n完成率：${total>0?Math.round(done/total*100):0}%`)};
-window.exportData=function(){document.getElementById('userMenu').classList.remove('show');backupData()};
-
-function renderWeekly(){const dn=currentUser&&!currentUser.isGuest?currentUser.username:'游客';document.getElementById('weeklyUserName').textContent=dn;const now=new Date(),ws=new Date(now);ws.setDate(now.getDate()-now.getDay()+1);const we=new Date(ws);we.setDate(ws.getDate()+6);document.getElementById('weeklyWeekInfo').textContent=`${ws.getMonth()+1}月${ws.getDate()}日 - ${we.getMonth()+1}月${we.getDate()}日`;const days=['一','二','三','四','五','六','日'],today=now.getDay();document.getElementById('weekGrid').innerHTML=days.map((day,i)=>{const date=new Date(ws);date.setDate(ws.getDate()+i);const dateStr=date.toDateString();const dayTasks=tasks.filter(t=>{const td=new Date(t.created);return td.toDateString()===dateStr});const done=dayTasks.filter(t=>t.completed).length,total=dayTasks.length;const isToday=(i===0&&today===1)||(i===1&&today===2)||(i===2&&today===3)||(i===3&&today===4)||(i===4&&today===5)||(i===5&&today===6)||(i===6&&today===0);return`<div class="day-box ${total>0?(done===total?'all-done':'has-task'):''} ${isToday?'today':''}"><div class="day-label">周${day}</div><div style="font-size:18px;font-weight:600;">${date.getDate()}</div><div style="font-size:11px;margin-top:2px;">${total>0?done+'/'+total:'-'}</div></div>`}).join('');const total=tasks.length,done=tasks.filter(t=>t.completed).length,pending=tasks.filter(t=>!t.completed),urgent=pending.filter(t=>t.type==='urgent'),rate=total>0?Math.round(done/total*100):0;document.getElementById('weeklyStats').innerHTML=`<div>📊 总任务数：${total} 项</div><div>✅ 已完成：${done} 项 (${rate}%)</div><div>⏳ 待完成：${pending.length} 项</div><div>🔴 紧急任务：${urgent.length} 项</div><div style="margin-top:12px;padding-top:12px;border-top:1px solid #e2e8f0;"><strong>待办清单：</strong><br>${pending.length>0?pending.map(t=>`• ${escapeHtml(t.text)} ${t.type==='urgent'?'(紧急)':''}`).join('<br>'):'暂无待办任务 🎉'}</div>`;const cats=getAllCategories();const catCounts={};tasks.forEach(t=>{catCounts[t.category]=(catCounts[t.category]||0)+1});document.getElementById('categoryStats').innerHTML=Object.entries(catCounts).map(([k,v])=>{const catDone=tasks.filter(t=>t.category===k&&t.completed).length,catRate=v>0?Math.round(catDone/v*100):0;return`<div style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;"><span>• ${cats[k]||k}</span><span>${catDone}/${v} (${catRate}%)</span></div><div class="progress-bar"><div class="progress-bar-fill" style="width:${catRate}%;"></div></div></div>`}).join('')}
-
-window.exportExcel=function(){const cats=getAllCategories(),now=new Date(),ws=new Date(now);ws.setDate(now.getDate()-now.getDay()+1);const we=new Date(ws);we.setDate(ws.getDate()+6);const userLabel=currentUser&&!currentUser.isGuest?currentUser.username:'游客';const done=tasks.filter(t=>t.completed).length,total=tasks.length,pending=tasks.filter(t=>!t.completed),urgent=pending.filter(t=>t.type==='urgent');let csv='\uFEFF';csv+=`工作排查周报 ${ws.getMonth()+1}月${ws.getDate()}日-${we.getMonth()+1}月${we.getDate()}日\n`;csv+=`用户：${userLabel}\n\n`;csv+=`统计概览\n`;csv+=`总任务数,${total}\n`;csv+=`已完成,${done}\n`;csv+=`完成率,${total>0?Math.round(done/total*100):0}%\n`;csv+=`待完成,${pending.length}\n`;csv+=`紧急任务,${urgent.length}\n\n`;csv+=`任务明细\n`;csv+=`序号,任务内容,类型,分类,标签,状态,创建时间,最新更新\n`;tasks.forEach((t,i)=>{const status=t.completed?'已完成':'进行中';const created=new Date(t.created).toLocaleString('zh-CN');const lastUpdate=t.updates&&t.updates.length>0?new Date(t.updates[t.updates.length-1].time).toLocaleString('zh-CN')+': '+t.updates[t.updates.length-1].text:'无更新';csv+=`${i+1},"${t.text}",${TYPE_MAP[t.type]||t.type},${cats[t.category]||'一般'},${t.tag||'-'},${status},${created},"${lastUpdate}"\n`});const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});const link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download=`工作周报_${userLabel}_${ws.getMonth()+1}月${ws.getDate()}日.csv`;link.click();showToast('Excel 已导出')};
-window.exportPDF=function(){const cats=getAllCategories(),now=new Date(),ws=new Date(now);ws.setDate(now.getDate()-now.getDay()+1);const we=new Date(ws);we.setDate(ws.getDate()+6);const userLabel=currentUser&&!currentUser.isGuest?currentUser.username:'游客';const done=tasks.filter(t=>t.completed).length,total=tasks.length,pending=tasks.filter(t=>!t.completed),urgent=pending.filter(t=>t.type==='urgent');const title=`工作排查周报 ${ws.getMonth()+1}月${ws.getDate()}日-${we.getMonth()+1}月${we.getDate()}日`;const rows=tasks.map((t,i)=>{let updates='';if(t.updates&&t.updates.length>0){updates='<div style="font-size:12px;color:#718096;margin-top:4px;">更新记录：<br>'+t.updates.slice(-3).map(u=>{const d=new Date(u.time);const icon=u.status==='completed'?'✅':u.status==='blocked'?'⚠️':'🔄';return`${icon} ${d.getMonth()+1}/${d.getDate()} ${d.getHours()}:${String(d.getMinutes()).padStart(2,'0')} ${u.text}`}).join('<br>')+'</div>'}return`<tr><td>${i+1}</td><td>${escapeHtml(t.text)}</td><td>${TYPE_MAP[t.type]||t.type}</td><td>${cats[t.category]||'一般'}</td><td>${t.tag||'-'}</td><td>${t.completed?'✅ 已完成':'⏳ 进行中'}</td><td>${new Date(t.created).toLocaleString('zh-CN')}</td><td>${updates}</td></tr>`}).join('');const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${title}</title><style>body{font-family:"Microsoft YaHei",sans-serif;padding:40px;color:#333}h1{color:#667eea;border-bottom:3px solid #667eea;padding-bottom:10px}.summary{background:#f7fafc;padding:20px;border-radius:8px;margin:20px 0}.summary-item{display:inline-block;margin:10px 20px;font-size:16px}.summary-item strong{color:#667eea;font-size:24px;display:block}table{width:100%;border-collapse:collapse;margin-top:20px}th{background:#667eea;color:white;padding:12px;text-align:left}td{padding:10px 12px;border-bottom:1px solid #e2e8f0}tr:nth-child(even){background:#f7fafc}</style></head><body><h1>📋 ${title}</h1><p style="color:#718096;margin-bottom:20px">用户：${userLabel}</p><div class="summary"><div class="summary-item"><strong>${total}</strong>总任务</div><div class="summary-item"><strong>${done}</strong>已完成</div><div class="summary-item"><strong>${total>0?Math.round(done/total*100):0}%</strong>完成率</div><div class="summary-item"><strong>${pending.length}</strong>待完成</div><div class="summary-item"><strong style="color:#c53030">${urgent.length}</strong>紧急</div></div><h2>📝 任务明细</h2><table><tr><th>序号</th><th>任务内容</th><th>类型</th><th>分类</th><th>标签</th><th>状态</th><th>创建时间</th><th>进度更新</th></tr>${rows}</table><div style="margin-top:40px;padding-top:20px;border-top:2px solid #e2e8f0;color:#a0aec0;font-size:12px">生成时间：${now.toLocaleString('zh-CN')} | 工作排查登记系统</div></body></html>`;const printWin=window.open('','_blank');printWin.document.write(html);printWin.document.close();printWin.focus();setTimeout(()=>{printWin.print();printWin.close()},300);showToast('PDF 已导出')};
-
-function renderReminders(){const dn=currentUser&&!currentUser.isGuest?currentUser.username:'游客';document.getElementById('remindersUserName').textContent=dn;const list=document.getElementById('remindersList');const empty=document.getElementById('remindersEmpty');if(activeReminders.length===0){list.innerHTML='';empty.style.display='block';return}empty.style.display='none';list.innerHTML=activeReminders.map(r=>`<div class="reminder-card"><div class="reminder-card-left"><div class="reminder-card-title">${escapeHtml(r.title)}</div><div class="reminder-card-time">${r.time}</div><div style="font-size:13px;color:#4a5568;margin-top:4px;">${escapeHtml(r.message)}</div></div><div class="reminder-card-actions"><button class="btn btn-small btn-success" onclick="dismissActiveReminder(${r.id})">✅ 完成</button></div></div>`).join('');updateNavBadge()}
-window.dismissActiveReminder=function(id){activeReminders=activeReminders.filter(r=>r.id!==id);saveAllData();renderReminders();updateNavBadge();showToast('提醒已消除')};
-function updateNavBadge(){const badge=document.getElementById('navBadge');const count=activeReminders.length;if(count>0){badge.textContent=count>99?'99+':count;badge.style.display='flex'}else{badge.style.display='none'}}
-
-function renderSettings(){const dn=currentUser&&!currentUser.isGuest?currentUser.username:'游客';document.getElementById('settingsUserName').textContent=dn;document.getElementById('toggleMorning').classList.toggle('active',reminders.morning);document.getElementById('toggleEvening').classList.toggle('active',reminders.evening);document.getElementById('toggleWeekly').classList.toggle('active',reminders.weekly);document.getElementById('toggleSunday').classList.toggle('active',reminders.sunday);document.getElementById('customRemindersList').innerHTML=customReminders.map(r=>{const repeatLabel=r.repeat==='daily'?'每天':r.repeat==='weekday'?'工作日':'一次';return`<div class="reminder-item" style="margin-top:8px;"><span>⏰ ${r.time} (${repeatLabel}) ${r.mail?'📧':''}</span><button class="btn btn-small btn-danger" onclick="deleteCustomReminder(${r.id})">删除</button></div>`}).join('');const cats=getAllCategories();document.getElementById('categoryList').innerHTML=Object.entries(cats).map(([key,name])=>{const count=tasks.filter(t=>t.category===key).length;const isDefault=!!CONFIG.DEFAULT_CATEGORIES[key];return`<div class="category-item"><div style="display:flex;align-items:center;flex:1;"><span class="category-name" data-key="${key}" ondblclick="startEditCategoryName('${key}')">${name}</span><span class="category-count">（${count} 项）</span></div>${isDefault?'<span style="font-size:12px;color:#a0aec0;">默认</span>':`<div class="cat-actions"><button class="btn btn-small btn-primary" onclick="openEditCategoryModal('${key}')" style="background:#4299e1;">✏️</button><button class="btn btn-small btn-danger" onclick="deleteCategory('${key}')">🗑️</button></div>`}</div>`}).join('')}
-window.toggleReminder=function(key){reminders[key]=!reminders[key];saveAllData();renderSettings()};
-window.addCustomReminder=function(){const time=document.getElementById('customTime').value,repeat=document.getElementById('customRepeat').value,mail=document.getElementById('customMail').checked;if(!time){showToast('请选择时间');return}customReminders.push({time,repeat,mail,id:Date.now()});saveAllData();renderSettings();showToast('自定义提醒已添加')};
-window.deleteCustomReminder=function(id){customReminders=customReminders.filter(r=>r.id!==id);saveAllData();renderSettings()};
-window.addCustomCategory=function(){const name=document.getElementById('newCategoryInput').value.trim();if(!name){showToast('请输入分类名称');return}const cats=getAllCategories();if(Object.values(cats).includes(name)){showToast('该分类已存在');return}customCategories.push({id:'cat_'+Date.now(),name});saveAllData();document.getElementById('newCategoryInput').value='';renderSettings();renderHome();showToast('分类已添加')};
-window.startEditCategoryName=function(key){if(CONFIG.DEFAULT_CATEGORIES[key])return;const el=document.querySelector('.category-name[data-key="'+key+'"]');if(!el)return;el.contentEditable='true';el.focus();const range=document.createRange();range.selectNodeContents(el);const sel=window.getSelection();sel.removeAllRanges();sel.addRange(range);el.onblur=function(){const newName=el.textContent.trim();const oldName=getAllCategories()[key];if(newName&&newName!==oldName){const cats=getAllCategories();const exists=Object.entries(cats).some(([k,v])=>k!==key&&v===newName);if(exists){showToast('该名称已存在');el.textContent=oldName}else{const cat=customCategories.find(c=>c.id===key);if(cat){cat.name=newName;saveAllData();renderSettings();renderHome();showToast('名称已修改')}}}else{el.textContent=oldName}el.contentEditable='false'};el.onkeydown=function(e){if(e.key==='Enter'){e.preventDefault();el.blur()}else if(e.key==='Escape'){el.textContent=getAllCategories()[key];el.contentEditable='false'}}};
-window.openEditCategoryModal=function(key){editingCategoryId=key;const cats=getAllCategories();document.getElementById('editCategoryInput').value=cats[key]||'';document.getElementById('editCategoryModal').classList.add('active');setTimeout(()=>document.getElementById('editCategoryInput').focus(),100)};
-window.confirmEditCategory=function(){const newName=document.getElementById('editCategoryInput').value.trim();if(!newName){showToast('名称不能为空');return}const cats=getAllCategories();if(cats[editingCategoryId]===newName){closeModal('editCategoryModal');return}const exists=Object.entries(cats).some(([k,v])=>k!==editingCategoryId&&v===newName);if(exists){showToast('该名称已存在');return}const cat=customCategories.find(c=>c.id===editingCategoryId);if(cat){cat.name=newName;saveAllData();renderSettings();renderHome();closeModal('editCategoryModal');editingCategoryId=null;showToast('名称已修改')}};
-window.deleteCategory=function(key){const cat=customCategories.find(c=>c.id===key);if(!cat)return;const count=tasks.filter(t=>t.category===key).length;const msg=count>0?`「${cat.name}」下有 ${count} 个任务，删除后这些任务将归类为「一般事务」，确定删除吗？`:`确定删除分类「${cat.name}」吗？`;if(!confirm(msg))return;tasks.forEach(t=>{if(t.category===key)t.category='general'});customCategories=customCategories.filter(c=>c.id!==key);saveAllData();renderSettings();renderHome();showToast('分类已删除')};
-window.backupData=function(){const data={tasks,reminders,customReminders,customCategories,activeReminders,username:currentUser&&!currentUser.isGuest?currentUser.username:null,exportTime:new Date().toISOString(),version:'2.0'};const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download=`工作排查备份_${new Date().toLocaleDateString('zh-CN')}.json`;link.click();const info=document.getElementById('backupInfo');if(info)info.textContent=`✅ 备份成功！${tasks.length} 个任务，${customCategories.length} 个分类`;showToast('数据已备份')};
-window.restoreData=function(input){const file=input.files[0];if(!file)return;const reader=new FileReader();reader.onload=function(e){try{const data=JSON.parse(e.target.result);if(data.tasks)tasks=data.tasks;if(data.reminders)reminders=data.reminders;if(data.customReminders)customReminders=data.customReminders;if(data.customCategories)customCategories=data.customCategories;if(data.activeReminders)activeReminders=data.activeReminders;saveAllData();renderHome();renderWeekly();renderSettings();renderReminders();const info=document.getElementById('backupInfo');if(info)info.textContent=`✅ 恢复成功！${tasks.length} 个任务已恢复`;showToast('数据恢复成功')}catch(err){showToast('文件格式错误')}};reader.readAsText(file);input.value=''};
-
-function startReminderCheck(){checkReminders();setInterval(checkReminders,30000)}
-let checkedMinutes=new Set();
-function checkReminders(){const now=new Date(),hour=now.getHours(),minute=now.getMinutes(),day=now.getDay(),minuteKey=`${hour}:${minute}`;if(checkedMinutes.has(minuteKey))return;checkedMinutes.clear();checkedMinutes.add(minuteKey);let triggered=false;if(reminders.morning&&hour===9&&minute===0){addActiveReminder('早上提醒','今天有任务待办，记得更新进度！','09:00');triggered=true}if(reminders.evening&&hour===17&&minute===0){const pending=tasks.filter(t=>!t.completed).length;addActiveReminder('下午检查',`还有 ${pending} 项任务未完成，进展如何？`,'17:00');triggered=true}if(reminders.weekly&&day===5&&hour===16&&minute===0){const done=tasks.filter(t=>t.completed).length,total=tasks.length;addActiveReminder('周五汇总',`本周完成 ${done}/${total} 项任务，记得更新周报！`,'周五 16:00');triggered=true}if(reminders.sunday&&day===0&&hour===20&&minute===0){addActiveReminder('周日规划','为下周做好准备，添加新的工作任务吧！','周日 20:00');triggered=true}const timeStr=`${String(hour).padStart(2,'0')}:${String(minute).padStart(2,'0')}`;customReminders.forEach(r=>{if(r.time===timeStr){if(r.repeat==='daily'||(r.repeat==='weekday'&&day>=1&&day<=5)){addActiveReminder('自定义提醒','该更新任务状态了！',r.time);if(r.mail){const subject=encodeURIComponent('任务提醒'),body=encodeURIComponent(`⏰ 自定义提醒：${r.time}\n\n该更新任务状态了！\n\n来自：工作排查登记系统`);const btn=document.getElementById('reminderMailBtn');btn.href=`mailto:?subject=${subject}&body=${body}`;btn.style.display='inline-block'}else{document.getElementById('reminderMailBtn').style.display='none'}triggered=true}}});if(triggered){updateNavBadge();showReminderPopup()}}
-function addActiveReminder(title,message,time){const exists=activeReminders.some(r=>r.title===title&&r.time===time);if(exists)return;activeReminders.push({id:Date.now(),title,message,time,created:new Date().toISOString()});saveAllData()}
-function showReminderPopup(){const popup=document.getElementById('reminderPopup');const latest=activeReminders[activeReminders.length-1];if(!latest)return;document.getElementById('reminderPopupText').textContent=latest.message;popup.classList.add('active');setTimeout(()=>popup.classList.remove('active'),5000)}
-window.dismissReminder=function(){document.getElementById('reminderPopup').classList.remove('active')};
-window.closeModal=function(id){document.getElementById(id).classList.remove('active')};
-function showToast(msg){const toast=document.getElementById('toast');toast.textContent=msg;toast.classList.add('active');setTimeout(()=>toast.classList.remove('active'),2000)}
-function showError(id,msg){const el=document.getElementById(id);el.textContent=msg;el.classList.add('show')}
-function escapeHtml(text){const div=document.createElement('div');div.textContent=text;return div.innerHTML}
-
-init();
+const App = (function() {
+  'use strict';
+  
+  const CONFIG = {
+    STORAGE_USERS: 'workTrackerUsers',
+    STORAGE_SESSION: 'workTrackerCurrentUser',
+    PREFIX_DATA: 'workTracker_data_',
+    DEFAULT_CATEGORIES: {
+      general: '一般事务',
+      mechanical: '机电工程',
+      design: '设计管理',
+      site: '现场协调',
+      doc: '文档审批',
+      meeting: '会议沟通'
+    }
+  };
+  const TYPE_MAP = { daily: '每日', weekly: '每周', urgent: '紧急' };
+  
+  let currentUser = null;
+  let tasks = [];
+  let reminders = { morning: true, evening: true, weekly: false, sunday: false };
+  let customReminders = [];
+  let customCategories = [];
+  let activeReminders = [];
+  let currentFilter = 'all';
+  let editingTaskId = null;
+  let editingCategoryId = null;
+  let checkedMinutes = new Set();
+  let reminderTimer = null;
+  
+  // ===== 数据层 =====
+  function getUsersDB() {
+    try { return JSON.parse(localStorage.getItem(CONFIG.STORAGE_USERS)) || {}; } catch(e) { return {}; }
+  }
+  function saveUsersDB(db) { localStorage.setItem(CONFIG.STORAGE_USERS, JSON.stringify(db)); }
+  function getUserDataKey(u) { return CONFIG.PREFIX_DATA + u; }
+  function getUserData(username) {
+    try {
+      const d = JSON.parse(localStorage.getItem(getUserDataKey(username))) || {};
+      return {
+        tasks: d.tasks || [],
+        reminders: d.reminders || { morning: true, evening: true, weekly: false, sunday: false },
+        customReminders: d.customReminders || [],
+        customCategories: d.customCategories || [],
+        activeReminders: d.activeReminders || []
+      };
+    } catch(e) {
+      return { tasks: [], reminders: { morning: true, evening: true, weekly: false, sunday: false }, customReminders: [], customCategories: [], activeReminders: [] };
+    }
+  }
+  function saveUserData(username, data) { localStorage.setItem(getUserDataKey(username), JSON.stringify(data)); }
+  function saveAllData() {
+    if (!currentUser || currentUser.isGuest) return;
+    saveUserData(currentUser.username, { tasks, reminders, customReminders, customCategories, activeReminders });
+  }
+  function loadAllData() {
+    if (!currentUser) return;
+    if (currentUser.isGuest) {
+      tasks = [];
+      reminders = { morning: true, evening: true, weekly: false, sunday: false };
+      customReminders = [];
+      customCategories = [];
+      activeReminders = [];
+    } else {
+      const d = getUserData(currentUser.username);
+      tasks = d.tasks;
+      reminders = d.reminders;
+      customReminders = d.customReminders;
+      customCategories = d.customCategories;
+      activeReminders = d.activeReminders || [];
+    }
+  }
+  function getAllCategories() {
+    const c = {};
+    customCategories.forEach(x => c[x.id] = x.name);
+    return { ...CONFIG.DEFAULT_CATEGORIES, ...c };
+  }
+  function checkAutoLogin() {
+    const s = localStorage.getItem(CONFIG.STORAGE_SESSION);
+    if (!s) return;
+    try {
+      const u = JSON.parse(s);
+      if (u.isGuest) { localStorage.removeItem(CONFIG.STORAGE_SESSION); return; }
+      const db = getUsersDB();
+      if (db[u.username]) { currentUser = u; loadAllData(); }
+    } catch(e) { localStorage.removeItem(CONFIG.STORAGE_SESSION); }
+  }
+  function showAuth() {
+    document.getElementById('authPage').classList.remove('hidden');
+    document.getElementById('appPage').classList.add('hidden');
+  }
+  function showApp() {
+    document.getElementById('authPage').classList.add('hidden');
+    document.getElementById('appPage').classList.remove('hidden');
+    switchTab('home');
+    startReminderCheck();
+  }
+  function init() {
+    checkAutoLogin();
+    if (currentUser) showApp(); else showAuth();
+  }
+  
+  // ===== 工具函数 =====
+  function showToast(msg) {
+    const toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.classList.add('active');
+    setTimeout(() => toast.classList.remove('active'), 2000);
+  }
+  function showError(id, msg) {
+    const el = document.getElementById(id);
+    el.textContent = msg;
+    el.classList.add('show');
+  }
+  function hideError(id) { document.getElementById(id).classList.remove('show'); }
+  function escapeHtml(text) { const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
+  function getWeekInfo() {
+    const now = new Date();
+    const ws = new Date(now); ws.setDate(now.getDate() - now.getDay() + 1);
+    const we = new Date(ws); we.setDate(ws.getDate() + 6);
+    return `${ws.getMonth()+1}月${ws.getDate()}日 - ${we.getMonth()+1}月${we.getDate()}日`;
+  }
+  
+  // ===== 认证 =====
+  function switchAuthTab(tab) {
+    document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+    event.target.classList.add('active');
+    document.getElementById(tab + 'Form').classList.add('active');
+    document.querySelectorAll('.auth-error').forEach(e => e.classList.remove('show'));
+  }
+  function handleLogin() {
+    const u = document.getElementById('loginUsername').value.trim();
+    const p = document.getElementById('loginPassword').value;
+    const db = getUsersDB();
+    if (!db[u] || db[u].password !== p) { showError('loginError', '用户名或密码错误'); return; }
+    currentUser = { username: u, isGuest: false };
+    localStorage.setItem(CONFIG.STORAGE_SESSION, JSON.stringify(currentUser));
+    loadAllData();
+    showApp();
+    showToast('登录成功');
+  }
+  function handleRegister() {
+    const u = document.getElementById('registerUsername').value.trim();
+    const p = document.getElementById('registerPassword').value;
+    const c = document.getElementById('registerConfirm').value;
+    if (!u || u.length < 3 || u.length > 20) { showError('registerError', '用户名需3-20位'); return; }
+    if (p.length < 6) { showError('registerError', '密码至少6位'); return; }
+    if (p !== c) { showError('registerError', '两次密码不一致'); return; }
+    const db = getUsersDB();
+    if (db[u]) { showError('registerError', '用户名已存在'); return; }
+    db[u] = { password: p, created: new Date().toISOString() };
+    saveUsersDB(db);
+    saveUserData(u, { tasks: [], reminders: { morning: true, evening: true, weekly: false, sunday: false }, customReminders: [], customCategories: [], activeReminders: [] });
+    showToast('注册成功！请登录');
+    document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+    document.querySelector('.auth-tabs .auth-tab:first-child').classList.add('active');
+    document.getElementById('loginForm').classList.add('active');
+    document.getElementById('loginUsername').value = u;
+    hideError('registerError');
+  }
+  function guestLogin() {
+    currentUser = { username: 'guest_' + Date.now(), isGuest: true };
+    loadAllData();
+    showApp();
+    showToast('游客模式');
+  }
+  function handleImportOnLogin(input) {
+    const file = input.files[0]; if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        const data = JSON.parse(e.target.result);
+        if (!data.tasks) { showToast('文件格式错误'); return; }
+        const username = data.username || 'imported_' + Date.now();
+        const db = getUsersDB();
+        if (!db[username]) { db[username] = { password: 'imported', created: new Date().toISOString() }; saveUsersDB(db); }
+        saveUserData(username, { tasks: data.tasks || [], reminders: data.reminders || { morning: true, evening: true, weekly: false, sunday: false }, customReminders: data.customReminders || [], customCategories: data.customCategories || [], activeReminders: data.activeReminders || [] });
+        currentUser = { username: username, isGuest: false };
+        localStorage.setItem(CONFIG.STORAGE_SESSION, JSON.stringify(currentUser));
+        loadAllData();
+        showApp();
+        showToast('数据导入成功');
+      } catch(err) { showToast('文件格式错误'); }
+    };
+    reader.readAsText(file); input.value = '';
+  }
+  function logout() {
+    if (!confirm('确定要退出吗？未保存的数据将丢失')) return;
+    currentUser = null; localStorage.removeItem(CONFIG.STORAGE_SESSION); location.reload();
+  }
+  
+  // ===== 导航 =====
+  function switchTab(tab) {
+    saveAllData();
+    document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById(tab + 'Tab').classList.add('active');
+    document.querySelector('.nav-item[data-tab="' + tab + '"]').classList.add('active');
+    if (tab === 'home') renderHome();
+    else if (tab === 'weekly') renderWeekly();
+    else if (tab === 'reminders') renderReminders();
+    else if (tab === 'settings') renderSettings();
+    window.scrollTo(0, 0);
+  }
+  
+  // ===== 首页 =====
+  function renderHome() {
+    const dn = currentUser && !currentUser.isGuest ? currentUser.username : '游客';
+    document.getElementById('homeUserName').textContent = dn;
+    document.getElementById('homeWeekInfo').textContent = getWeekInfo();
+    const total = tasks.length, done = tasks.filter(t => t.completed).length, urgent = tasks.filter(t => t.type === 'urgent' && !t.completed).length;
+    document.getElementById('statTotal').textContent = total;
+    document.getElementById('statDone').textContent = done;
+    document.getElementById('statPending').textContent = total - done;
+    document.getElementById('statUrgent').textContent = urgent;
+    const cats = getAllCategories();
+    const catSelect = document.getElementById('taskCategory');
+    catSelect.innerHTML = Object.entries(cats).map(([k, v]) => `<option value="${k}">${v}</option>`).join('');
+    let fb = `<button class="filter-btn ${currentFilter === 'all' ? 'active' : ''}" onclick="App.setFilter('all')">全部</button>`;
+    fb += `<button class="filter-btn ${currentFilter === 'pending' ? 'active' : ''}" onclick="App.setFilter('pending')">待办</button>`;
+    fb += `<button class="filter-btn ${currentFilter === 'completed' ? 'active' : ''}" onclick="App.setFilter('completed')">已完成</button>`;
+    fb += `<button class="filter-btn ${currentFilter === 'urgent' ? 'active' : ''}" onclick="App.setFilter('urgent')">紧急</button>`;
+    Object.entries(cats).forEach(([k, v]) => { if (k !== 'general') fb += `<button class="filter-btn ${currentFilter === k ? 'active' : ''}" onclick="App.setFilter('${k}')">${v}</button>`; });
+    document.getElementById('filterBar').innerHTML = fb;
+    let filtered = tasks;
+    if (currentFilter === 'pending') filtered = tasks.filter(t => !t.completed);
+    else if (currentFilter === 'completed') filtered = tasks.filter(t => t.completed);
+    else if (currentFilter === 'urgent') filtered = tasks.filter(t => t.type === 'urgent');
+    else if (currentFilter !== 'all') filtered = tasks.filter(t => t.category === currentFilter);
+    const sorted = [...filtered].sort((a, b) => {
+      if (a.completed !== b.completed) return a.completed ? 1 : -1;
+      if (a.type === 'urgent' && b.type !== 'urgent') return -1;
+      if (b.type === 'urgent' && a.type !== 'urgent') return 1;
+      return new Date(b.created) - new Date(a.created);
+    });
+    const listEl = document.getElementById('taskList');
+    if (sorted.length === 0) { listEl.innerHTML = ''; document.getElementById('emptyState').style.display = 'block'; return; }
+    document.getElementById('emptyState').style.display = 'none';
+    listEl.innerHTML = sorted.map(task => {
+      const date = new Date(task.created);
+      const dateStr = `${date.getMonth()+1}/${date.getDate()} ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
+      const updates = task.updates || [];
+      const updateLogs = updates.slice(-3).map(u => {
+        const d = new Date(u.time);
+        const icon = u.status === 'completed' ? '✅' : u.status === 'blocked' ? '⚠️' : '🔄';
+        return `<div class="update-entry">${icon} ${d.getMonth()+1}/${d.getDate()} ${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')} - ${u.text}</div>`;
+      }).join('');
+      return `<div class="task-card ${task.completed ? 'completed' : ''} ${task.type === 'urgent' && !task.completed ? 'urgent' : ''}">
+        <div class="task-header"><span class="task-title" id="taskTitle-${task.id}" ondblclick="App.startEditTaskName(${task.id})">${escapeHtml(task.text)}</span>
+          <div style="display:flex;gap:4px;flex-wrap:wrap;">
+            <span class="tag ${task.type === 'daily' ? 'tag-daily' : task.type === 'weekly' ? 'tag-weekly' : 'tag-urgent'}">${TYPE_MAP[task.type]}</span>
+            <span class="tag tag-category">${cats[task.category] || '一般'}</span>
+            ${task.tag ? `<span class="tag tag-user">#${escapeHtml(task.tag)}</span>` : ''}
+          </div>
+        </div>
+        <div class="task-meta"><span>📅 ${dateStr}</span>${task.completed ? '<span class="tag tag-completed">已完成</span>' : ''}</div>
+        ${updateLogs ? `<div class="update-log">${updateLogs}</div>` : ''}
+        <div class="task-actions">
+          <button class="btn btn-small btn-success" onclick="App.openUpdateModal(${task.id})">🔄 更新</button>
+          <button class="btn btn-small ${task.completed ? 'btn-warning' : 'btn-success'}" onclick="App.toggleComplete(${task.id})">${task.completed ? '↩️ 恢复' : '✅ 完成'}</button>
+          <button class="btn btn-small btn-danger" onclick="App.deleteTask(${task.id})">🗑️ 删除</button>
+        </div>
+      </div>`;
+    }).join('');
+  }
+  function setFilter(filter) { currentFilter = filter; renderHome(); }
+  function addTask() {
+    const text = document.getElementById('taskInput').value.trim();
+    if (!text) { showToast('请输入任务内容'); return; }
+    const task = { id: Date.now(), text: text, type: document.getElementById('taskType').value, category: document.getElementById('taskCategory').value, tag: document.getElementById('taskTag').value.trim(), created: new Date().toISOString(), completed: false, updates: [] };
+    tasks.unshift(task); saveAllData(); document.getElementById('taskInput').value = ''; document.getElementById('taskTag').value = ''; renderHome(); showToast('任务已添加');
+  }
+  function startEditTaskName(id) {
+    const task = tasks.find(t => t.id === id); if (!task) return;
+    const el = document.getElementById('taskTitle-' + id);
+    el.contentEditable = 'true'; el.focus();
+    const range = document.createRange(); range.selectNodeContents(el);
+    const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
+    el.onblur = function() {
+      const newName = el.textContent.trim();
+      if (newName && newName !== task.text) { task.text = newName; saveAllData(); showToast('任务名称已修改'); }
+      el.contentEditable = 'false'; renderHome();
+    };
+    el.onkeydown = function(e) { if (e.key === 'Enter') { e.preventDefault(); el.blur(); } else if (e.key === 'Escape') { el.textContent = task.text; el.contentEditable = 'false'; } };
+  }
+  function toggleComplete(id) { const task = tasks.find(t => t.id === id); if (!task) return; task.completed = !task.completed; if (task.completed) { task.updates = task.updates || []; task.updates.push({ time: new Date().toISOString(), text: '标记为完成', status: 'completed' }); } saveAllData(); renderHome(); }
+  function deleteTask(id) { if (!confirm('确定要删除这个任务吗？')) return; tasks = tasks.filter(t => t.id !== id); saveAllData(); renderHome(); showToast('已删除'); }
+  function openUpdateModal(id) { editingTaskId = id; document.getElementById('updateText').value = ''; document.getElementById('updateStatus').value = 'progress'; document.getElementById('updateModal').classList.add('active'); }
+  function saveUpdate() {
+    const text = document.getElementById('updateText').value.trim();
+    if (!text) { showToast('请输入更新内容'); return; }
+    const task = tasks.find(t => t.id === editingTaskId); if (!task) return;
+    task.updates = task.updates || []; const status = document.getElementById('updateStatus').value;
+    task.updates.push({ time: new Date().toISOString(), text: text, status: status });
+    if (status === 'completed') task.completed = true;
+    saveAllData(); closeModal('updateModal'); editingTaskId = null; renderHome(); showToast('任务已更新');
+  }
+  function openCategoryModal() { document.getElementById('categoryModalInput').value = ''; document.getElementById('categoryModal').classList.add('active'); setTimeout(() => document.getElementById('categoryModalInput').focus(), 100); }
+  function confirmAddCategory() {
+    const name = document.getElementById('categoryModalInput').value.trim();
+    if (!name) { showToast('请输入分类名称'); return; }
+    const cats = getAllCategories(); if (Object.values(cats).includes(name)) { showToast('该分类已存在'); return; }
+    customCategories.push({ id: 'cat_' + Date.now(), name }); saveAllData(); renderHome(); closeModal('categoryModal'); showToast('分类已添加');
+  }
+  function toggleUserMenu() { document.getElementById('userMenu').classList.toggle('show'); }
+  function showUserInfo() {
+    document.getElementById('userMenu').classList.remove('show');
+    const total = tasks.length, done = tasks.filter(t => t.completed).length, isGuest = currentUser && currentUser.isGuest;
+    alert(`用户名：${isGuest ? '游客（临时）' : currentUser.username}\n类型：${isGuest ? '游客模式' : '注册用户'}\n总任务：${total} 项\n已完成：${done} 项\n完成率：${total > 0 ? Math.round(done/total*100) : 0}%`);
+  }
+  function exportData() { document.getElementById('userMenu').classList.remove('show'); backupData(); }
+  
+  // ===== 周报 =====
+  function renderWeekly() {
+    const dn = currentUser && !currentUser.isGuest ? currentUser.username : '游客';
+    document.getElementById('weeklyUserName').textContent = dn;
+    document.getElementById('weeklyWeekInfo').textContent = getWeekInfo();
+    const now = new Date(), ws = new Date(now); ws.setDate(now.getDate() - now.getDay() + 1);
+    const days = ['一','二','三','四','五','六','日'], today = now.getDay();
+    document.getElementById('weekGrid').innerHTML = days.map((day, i) => {
+      const date = new Date(ws); date.setDate(ws.getDate() + i);
+      const dateStr = date.toDateString();
+      const dayTasks = tasks.filter(t => { const td = new Date(t.created); return td.toDateString() === dateStr; });
+      const done = dayTasks.filter(t => t.completed).length, total = dayTasks.length;
+      const isToday = (i === 0 && today === 1) || (i === 1 && today === 2) || (i === 2 && today === 3) || (i === 3 && today === 4) || (i === 4 && today === 5) || (i === 5 && today === 6) || (i === 6 && today === 0);
+      return `<div class="day-box ${total > 0 ? (done === total ? 'all-done' : 'has-task') : ''} ${isToday ? 'today' : ''}"><div class="day-label">周${day}</div><div style="font-size:18px;font-weight:600;">${date.getDate()}</div><div style="font-size:11px;margin-top:2px;">${total > 0 ? done + '/' + total : '-'}</div></div>`;
+    }).join('');
+    const total = tasks.length, done = tasks.filter(t => t.completed).length, pending = tasks.filter(t => !t.completed), urgent = pending.filter(t => t.type === 'urgent'), rate = total > 0 ? Math.round(done/total*100) : 0;
+    document.getElementById('weeklyStats').innerHTML = `<div>📊 总任务数：${total} 项</div><div>✅ 已完成：${done} 项 (${rate}%)</div><div>⏳ 待完成：${pending.length} 项</div><div>🔴 紧急任务：${urgent.length} 项</div><div style="margin-top:12px;padding-top:12px;border-top:1px solid #e2e8f0;"><strong>待办清单：</strong><br>${pending.length > 0 ? pending.map(t => `• ${escapeHtml(t.text)} ${t.type === 'urgent' ? '(紧急)' : ''}`).join('<br>') : '暂无待办任务 🎉'}</div>`;
+    const cats = getAllCategories(); const catCounts = {}; tasks.forEach(t => { catCounts[t.category] = (catCounts[t.category] || 0) + 1; });
+    document.getElementById('categoryStats').innerHTML = Object.entries(catCounts).map(([k, v]) => {
+      const catDone = tasks.filter(t => t.category === k && t.completed).length, catRate = v > 0 ? Math.round(catDone/v*100) : 0;
+      return `<div style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;"><span>• ${cats[k] || k}</span><span>${catDone}/${v} (${catRate}%)</span></div><div class="progress-bar"><div class="progress-bar-fill" style="width:${catRate}%;"></div></div></div>`;
+    }).join('');
+  }
+  function exportExcel() {
+    const cats = getAllCategories(), now = new Date(), ws = new Date(now); ws.setDate(now.getDate() - now.getDay() + 1); const we = new Date(ws); we.setDate(ws.getDate() + 6);
+    const userLabel = currentUser && !currentUser.isGuest ? currentUser.username : '游客';
+    const done = tasks.filter(t => t.completed).length, total = tasks.length, pending = tasks.filter(t => !t.completed), urgent = pending.filter(t => t.type === 'urgent');
+    let csv = '\uFEFF'; csv += `工作排查周报 ${ws.getMonth()+1}月${ws.getDate()}日-${we.getMonth()+1}月${we.getDate()}日\n`; csv += `用户：${userLabel}\n\n`; csv += `统计概览\n`; csv += `总任务数,${total}\n`; csv += `已完成,${done}\n`; csv += `完成率,${total > 0 ? Math.round(done/total*100) : 0}%\n`; csv += `待完成,${pending.length}\n`; csv += `紧急任务,${urgent.length}\n\n`; csv += `任务明细\n`; csv += `序号,任务内容,类型,分类,标签,状态,创建时间,最新更新\n`;
+    tasks.forEach((t, i) => { const status = t.completed ? '已完成' : '进行中'; const created = new Date(t.created).toLocaleString('zh-CN'); const lastUpdate = t.updates && t.updates.length > 0 ? new Date(t.updates[t.updates.length-1].time).toLocaleString('zh-CN') + ': ' + t.updates[t.updates.length-1].text : '无更新'; csv += `${i+1},"${t.text}",${TYPE_MAP[t.type] || t.type},${cats[t.category] || '一般'},${t.tag || '-'},${status},${created},"${lastUpdate}"\n`; });
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `工作周报_${userLabel}_${ws.getMonth()+1}月${ws.getDate()}日.csv`; link.click(); showToast('Excel 已导出');
+  }
+  function exportPDF() {
+    const cats = getAllCategories(), now = new Date(), ws = new Date(now); ws.setDate(now.getDate() - now.getDay() + 1); const we = new Date(ws); we.setDate(ws.getDate() + 6);
+    const userLabel = currentUser && !currentUser.isGuest ? currentUser.username : '游客';
+    const done = tasks.filter(t => t.completed).length, total = tasks.length, pending = tasks.filter(t => !t.completed), urgent = pending.filter(t => t.type === 'urgent');
+    const title = `工作排查周报 ${ws.getMonth()+1}月${ws.getDate()}日-${we.getMonth()+1}月${we.getDate()}日`;
+    const rows = tasks.map((t, i) => {
+      let updates = ''; if (t.updates && t.updates.length > 0) { updates = '<div style="font-size:12px;color:#718096;margin-top:4px;">更新记录：<br>' + t.updates.slice(-3).map(u => { const d = new Date(u.time); const icon = u.status === 'completed' ? '✅' : u.status === 'blocked' ? '⚠️' : '🔄'; return `${icon} ${d.getMonth()+1}/${d.getDate()} ${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')} ${u.text}`; }).join('<br>') + '</div>'; }
+      return `<tr><td>${i+1}</td><td>${escapeHtml(t.text)}</td><td>${TYPE_MAP[t.type] || t.type}</td><td>${cats[t.category] || '一般'}</td><td>${t.tag || '-'}</td><td>${t.completed ? '✅ 已完成' : '⏳ 进行中'}</td><td>${new Date(t.created).toLocaleString('zh-CN')}</td><td>${updates}</td></tr>`;
+    }).join('');
+    const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${title}</title><style>body{font-family:"Microsoft YaHei",sans-serif;padding:40px;color:#333}h1{color:#667eea;border-bottom:3px solid #667eea;padding-bottom:10px}.summary{background:#f7fafc;padding:20px;border-radius:8px;margin:20px 0}.summary-item{display:inline-block;margin:10px 20px;font-size:16px}.summary-item strong{color:#667eea;font-size:24px;display:block}table{width:100%;border-collapse:collapse;margin-top:20px}th{background:#667eea;color:white;padding:12px;text-align:left}td{padding:10px 12px;border-bottom:1px solid #e2e8f0}tr:nth-child(even){background:#f7fafc}</style></head><body><h1>📋 ${title}</h1><p style="color:#718096;margin-bottom:20px">用户：${userLabel}</p><div class="summary"><div class="summary-item"><strong>${total}</strong>总任务</div><div class="summary-item"><strong>${done}</strong>已完成</div><div class="summary-item"><strong>${total > 0 ? Math.round(done/total*100) : 0}%</strong>完成率</div><div class="summary-item"><strong>${pending.length}</strong>待完成</div><div class="summary-item"><strong style="color:#c53030">${urgent.length}</strong>紧急</div></div><h2>📝 任务明细</h2><table><tr><th>序号</th><th>任务内容</th><th>类型</th><th>分类</th><th>标签</th><th>状态</th><th>创建时间</th><th>进度更新</th></tr>${rows}</table><div style="margin-top:40px;padding-top:20px;border-top:2px solid #e2e8f0;color:#a0aec0;font-size:12px">生成时间：${now.toLocaleString('zh-CN')} | 工作排查登记系统</div></body></html>`;
+    const printWin = window.open('', '_blank'); printWin.document.write(html); printWin.document.close(); printWin.focus(); setTimeout(() => { printWin.print(); printWin.close(); }, 300); showToast('PDF 已导出');
+  }
+  
+  // ===== 提醒页面 =====
+  function renderReminders() {
+    const dn = currentUser && !currentUser.isGuest ? currentUser.username : '游客';
+    document.getElementById('remindersUserName').textContent = dn;
+    const list = document.getElementById('remindersList'); const empty = document.getElementById('remindersEmpty');
+    if (activeReminders.length === 0) { list.innerHTML = ''; empty.style.display = 'block'; return; }
+    empty.style.display = 'none';
+    list.innerHTML = activeReminders.map(r => `<div class="reminder-card"><div class="reminder-card-left"><div class="reminder-card-title">${escapeHtml(r.title)}</div><div class="reminder-card-time">${r.time}</div><div style="font-size:13px;color:#4a5568;margin-top:4px;">${escapeHtml(r.message)}</div></div><div class="reminder-card-actions"><button class="btn btn-small btn-success" onclick="App.dismissActiveReminder(${r.id})">✅ 完成</button></div></div>`).join('');
+    updateNavBadge();
+  }
+  function dismissActiveReminder(id) { activeReminders = activeReminders.filter(r => r.id !== id); saveAllData(); renderReminders(); updateNavBadge(); showToast('提醒已消除'); }
+  function updateNavBadge() { const badge = document.getElementById('navBadge'); const count = activeReminders.length; if (count > 0) { badge.textContent = count > 99 ? '99+' : count; badge.style.display = 'flex'; } else { badge.style.display = 'none'; } }
+  
+  // ===== 设置页面 =====
+  function renderSettings() {
+    const dn = currentUser && !currentUser.isGuest ? currentUser.username : '游客';
+    document.getElementById('settingsUserName').textContent = dn;
+    document.getElementById('toggleMorning').classList.toggle('active', reminders.morning);
+    document.getElementById('toggleEvening').classList.toggle('active', reminders.evening);
+    document.getElementById('toggleWeekly').classList.toggle('active', reminders.weekly);
+    document.getElementById('toggleSunday').classList.toggle('active', reminders.sunday);
+    document.getElementById('customRemindersList').innerHTML = customReminders.map(r => { const repeatLabel = r.repeat === 'daily' ? '每天' : r.repeat === 'weekday' ? '工作日' : '一次'; return `<div class="reminder-item" style="margin-top:8px;"><span>⏰ ${r.time} (${repeatLabel}) ${r.mail ? '📧' : ''}</span><button class="btn btn-small btn-danger" onclick="App.deleteCustomReminder(${r.id})">删除</button></div>`; }).join('');
+    const cats = getAllCategories();
+    document.getElementById('categoryList').innerHTML = Object.entries(cats).map(([key, name]) => {
+      const count = tasks.filter(t => t.category === key).length;
+      const isDefault = !!CONFIG.DEFAULT_CATEGORIES[key];
+      return `<div class="category-item"><div style="display:flex;align-items:center;flex:1;"><span class="category-name" data-key="${key}" ondblclick="App.startEditCategoryName('${key}')">${name}</span><span class="category-count">（${count} 项）</span></div>${isDefault ? '<span style="font-size:12px;color:#a0aec0;">默认</span>' : `<div class="cat-actions"><button class="btn btn-small btn-primary" onclick="App.openEditCategoryModal('${key}')" style="background:#4299e1;">✏️</button><button class="btn btn-small btn-danger" onclick="App.deleteCategory('${key}')">🗑️</button></div>`}</div>`;
+    }).join('');
+  }
+  function toggleReminder(key) { reminders[key] = !reminders[key]; saveAllData(); renderSettings(); }
+  function addCustomReminder() { const time = document.getElementById('customTime').value, repeat = document.getElementById('customRepeat').value, mail = document.getElementById('customMail').checked; if (!time) { showToast('请选择时间'); return; } customReminders.push({ time, repeat, mail, id: Date.now() }); saveAllData(); renderSettings(); showToast('自定义提醒已添加'); }
+  function deleteCustomReminder(id) { customReminders = customReminders.filter(r => r.id !== id); saveAllData(); renderSettings(); }
+  function addCustomCategory() { const name = document.getElementById('newCategoryInput').value.trim(); if (!name) { showToast('请输入分类名称'); return; } const cats = getAllCategories(); if (Object.values(cats).includes(name)) { showToast('该分类已存在'); return; } customCategories.push({ id: 'cat_' + Date.now(), name }); saveAllData(); document.getElementById('newCategoryInput').value = ''; renderSettings(); renderHome(); showToast('分类已添加'); }
+  function startEditCategoryName(key) { if (CONFIG.DEFAULT_CATEGORIES[key]) return; const el = document.querySelector('.category-name[data-key="' + key + '"]'); if (!el) return; el.contentEditable = 'true'; el.focus(); const range = document.createRange(); range.selectNodeContents(el); const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range); el.onblur = function() { const newName = el.textContent.trim(); const oldName = getAllCategories()[key]; if (newName && newName !== oldName) { const cats = getAllCategories(); const exists = Object.entries(cats).some(([k, v]) => k !== key && v === newName); if (exists) { showToast('该名称已存在'); el.textContent = oldName; } else { const cat = customCategories.find(c => c.id === key); if (cat) { cat.name = newName; saveAllData(); renderSettings(); renderHome(); showToast('名称已修改'); } } } else { el.textContent = oldName; } el.contentEditable = 'false'; }; el.onkeydown = function(e) { if (e.key === 'Enter') { e.preventDefault(); el.blur(); } else if (e.key === 'Escape') { el.textContent = getAllCategories()[key]; el.contentEditable = 'false'; } }; }
+  function openEditCategoryModal(key) { editingCategoryId = key; const cats = getAllCategories(); document.getElementById('editCategoryInput').value = cats[key] || ''; document.getElementById('editCategoryModal').classList.add('active'); setTimeout(() => document.getElementById('editCategoryInput').focus(), 100); }
+  function confirmEditCategory() { const newName = document.getElementById('editCategoryInput').value.trim(); if (!newName) { showToast('名称不能为空'); return; } const cats = getAllCategories(); if (cats[editingCategoryId] === newName) { closeModal('editCategoryModal'); return; } const exists = Object.entries(cats).some(([k, v]) => k !== editingCategoryId && v === newName); if (exists) { showToast('该名称已存在'); return; } const cat = customCategories.find(c => c.id === editingCategoryId); if (cat) { cat.name = newName; saveAllData(); renderSettings(); renderHome(); closeModal('editCategoryModal'); editingCategoryId = null; showToast('名称已修改'); } }
+  function deleteCategory(key) { const cat = customCategories.find(c => c.id === key); if (!cat) return; const count = tasks.filter(t => t.category === key).length; const msg = count > 0 ? `「${cat.name}」下有 ${count} 个任务，删除后这些任务将归类为「一般事务」，确定删除吗？` : `确定删除分类「${cat.name}」吗？`; if (!confirm(msg)) return; tasks.forEach(t => { if (t.category === key) t.category = 'general'; }); customCategories = customCategories.filter(c => c.id !== key); saveAllData(); renderSettings(); renderHome(); showToast('分类已删除'); }
+  function backupData() { const data = { tasks, reminders, customReminders, customCategories, activeReminders, username: currentUser && !currentUser.isGuest ? currentUser.username : null, exportTime: new Date().toISOString(), version: '2.0' }; const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `工作排查备份_${new Date().toLocaleDateString('zh-CN')}.json`; link.click(); const info = document.getElementById('backupInfo'); if (info) info.textContent = `✅ 备份成功！${tasks.length} 个任务，${customCategories.length} 个分类`; showToast('数据已备份'); }
+  function restoreData(input) { const file = input.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = function(e) { try { const data = JSON.parse(e.target.result); if (data.tasks) tasks = data.tasks; if (data.reminders) reminders = data.reminders; if (data.customReminders) customReminders = data.customReminders; if (data.customCategories) customCategories = data.customCategories; if (data.activeReminders) activeReminders = data.activeReminders; saveAllData(); renderHome(); renderWeekly(); renderSettings(); renderReminders(); const info = document.getElementById('backupInfo'); if (info) info.textContent = `✅ 恢复成功！${tasks.length} 个任务已恢复`; showToast('数据恢复成功'); } catch(err) { showToast('文件格式错误'); } }; reader.readAsText(file); input.value = ''; }
+  
+  // ===== 提醒检查 =====
+  function startReminderCheck() { if (reminderTimer) clearInterval(reminderTimer); checkReminders(); reminderTimer = setInterval(checkReminders, 30000); }
+  function checkReminders() {
+    const now = new Date(), hour = now.getHours(), minute = now.getMinutes(), day = now.getDay();
+    const minuteKey = `${hour}:${minute}`; if (checkedMinutes.has(minuteKey)) return; checkedMinutes.clear(); checkedMinutes.add(minuteKey);
+    let triggered = false;
+    if (reminders.morning && hour === 9 && minute === 0) { addActiveReminder('早上提醒', '今天有任务待办，记得更新进度！', '09:00'); triggered = true; }
+    if (reminders.evening && hour === 17 && minute === 0) { const pending = tasks.filter(t => !t.completed).length; addActiveReminder('下午检查', `还有 ${pending} 项任务未完成，进展如何？`, '17:00'); triggered = true; }
+    if (reminders.weekly && day === 5 && hour === 16 && minute === 0) { const done = tasks.filter(t => t.completed).length, total = tasks.length; addActiveReminder('周五汇总', `本周完成 ${done}/${total} 项任务，记得更新周报！`, '周五 16:00'); triggered = true; }
+    if (reminders.sunday && day === 0 && hour === 20 && minute === 0) { addActiveReminder('周日规划', '为下周做好准备，添加新的工作任务吧！', '周日 20:00'); triggered = true; }
+    const timeStr = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+    customReminders.forEach(r => { if (r.time === timeStr) { if (r.repeat === 'daily' || (r.repeat === 'weekday' && day >= 1 && day <= 5)) { addActiveReminder('自定义提醒', '该更新任务状态了！', r.time); if (r.mail) { const subject = encodeURIComponent('任务提醒'), body = encodeURIComponent(`⏰ 自定义提醒：${r.time}\n\n该更新任务状态了！\n\n来自：工作排查登记系统`); const btn = document.getElementById('reminderMailBtn'); btn.href = `mailto:?subject=${subject}&body=${body}`; btn.style.display = 'inline-block'; } else { document.getElementById('reminderMailBtn').style.display = 'none'; } triggered = true; } } });
+    if (triggered) { updateNavBadge(); showReminderPopup(); }
+  }
+  function addActiveReminder(title, message, time) {
+    const exists = activeReminders.some(r => r.title === title && r.time === time);
+    if (exists) return;
+    activeReminders.push({ id: Date.now(), title, message, time, created: new Date().toISOString() });
+    saveAllData();
+  }
+  function showReminderPopup() { const popup = document.getElementById('reminderPopup'); const latest = activeReminders[activeReminders.length - 1]; if (!latest) return; document.getElementById('reminderPopupText').textContent = latest.message; popup.classList.add('active'); setTimeout(() => popup.classList.remove('active'), 5000); }
+  function dismissReminder() { document.getElementById('reminderPopup').classList.remove('active'); }
+  function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+  
+  // ===== 初始化 =====
+  document.addEventListener('DOMContentLoaded', init);
+  document.addEventListener('click', function(e) { if (!e.target.closest('.header-user')) document.getElementById('userMenu').classList.remove('show'); });
+  
+  // ===== 公开 API =====
+  return {
+    switchAuthTab, handleLogin, handleRegister, guestLogin, handleImportOnLogin, logout,
+    switchTab, setFilter, addTask, startEditTaskName, toggleComplete, deleteTask,
+    openUpdateModal, saveUpdate, openCategoryModal, confirmAddCategory,
+    toggleUserMenu, showUserInfo, exportData,
+    exportExcel, exportPDF,
+    dismissActiveReminder,
+    toggleReminder, addCustomReminder, deleteCustomReminder, addCustomCategory,
+    startEditCategoryName, openEditCategoryModal, confirmEditCategory, deleteCategory,
+    backupData, restoreData,
+    dismissReminder, closeModal
+  };
 })();
-
 </script>
 </body>
 </html>
