@@ -2,13 +2,13 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>工作排查登记</title>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-body { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f7fa; color: #333; line-height: 1.6; min-height: 100vh; padding-bottom: 80px; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f7fa; color: #333; line-height: 1.6; min-height: 100vh; padding-top: 64px; }
 .hidden { display: none !important; }
-.app-container { max-width: 600px; margin: 0 auto; position: relative; }
+.app-container { max-width: 1200px; margin: 0 auto; position: relative; padding: 0 24px; }
 
 /* 登录页 */
 .auth-page { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; }
@@ -41,8 +41,17 @@ body { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Ro
 .import-hint a { color: #667eea; cursor: pointer; text-decoration: underline; }
 .github-token-hint { font-size: 12px; color: #a0aec0; margin-top: 4px; }
 
+/* 顶部导航 */
+.top-nav { position: fixed; top: 0; left: 0; right: 0; background: white; display: flex; justify-content: space-between; align-items: center; padding: 0 24px; height: 56px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); z-index: 100; border-bottom: 1px solid #f0f0f0; }
+.top-nav-left { display: flex; align-items: center; gap: 8px; font-size: 18px; font-weight: 600; color: #667eea; }
+.top-nav-right { display: flex; align-items: center; gap: 4px; }
+.top-nav-item { display: flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s; color: #718096; position: relative; }
+.top-nav-item:hover { background: #f7fafc; color: #667eea; }
+.top-nav-item.active { background: #667eea; color: white; }
+.top-nav-icon { font-size: 18px; }
+
 /* 头部 */
-.header-gradient { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 24px 16px; border-radius: 0 0 20px 20px; margin-bottom: 16px; }
+.header-gradient { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 24px 16px; border-radius: 0 0 20px 20px; margin-bottom: 16px; margin-top: -8px; margin-left: -24px; margin-right: -24px; }
 .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
 .header-title { font-size: 20px; font-weight: 600; }
 .header-user { font-size: 13px; opacity: 0.9; background: rgba(255,255,255,0.2); padding: 6px 14px; border-radius: 20px; cursor: pointer; position: relative; }
@@ -58,10 +67,10 @@ body { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Ro
 .user-menu-divider { height: 1px; background: #e2e8f0; margin: 8px 0; }
 
 /* 容器 */
-.container { padding: 0 16px; }
+.container { padding: 0; }
 
 /* 卡片 */
-.card { background: white; padding: 16px; border-radius: 16px; margin-bottom: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+.card { background: white; padding: 20px; border-radius: 16px; margin-bottom: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
 
 /* 输入 */
 .input-group { display: flex; gap: 10px; margin-bottom: 12px; align-items: center; }
@@ -80,7 +89,7 @@ select { background: white; cursor: pointer; }
 .tag-reminder { background: #c6f6d5; color: #276749; }
 
 /* 任务卡片 */
-.task-card { background: white; padding: 16px; border-radius: 16px; margin-bottom: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); border-left: 4px solid #667eea; transition: all 0.3s; user-select: none; -webkit-user-select: none; }
+.task-card { background: white; padding: 16px; border-radius: 16px; margin-bottom: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); border-left: 4px solid #667eea; transition: all 0.3s; }
 .task-card:hover { transform: translateX(3px); box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
 .task-card.completed { opacity: 0.6; border-left-color: #48bb78; }
 .task-card.completed .task-title { text-decoration: line-through; }
@@ -91,20 +100,19 @@ select { background: white; cursor: pointer; }
 .task-meta { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 8px; font-size: 13px; color: #718096; }
 .task-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
 
-/* 拖拽 */
-.drag-handle { cursor: grab; padding: 4px 6px; color: #a0aec0; user-select: none; font-size: 16px; line-height: 1; border-radius: 6px; margin-right: 6px; flex-shrink: 0; }
-.drag-handle:active { cursor: grabbing; background: #e2e8f0; }
-.task-card.dragging { opacity: 0.6; border: 2px dashed #667eea; transform: scale(0.98); box-shadow: 0 4px 20px rgba(102,126,234,0.2); }
-.task-card.drag-over { border-top: 3px solid #667eea; margin-top: 8px; }
-
 /* 更新记录 */
 .update-log { font-size: 13px; color: #718096; margin-top: 12px; padding-top: 12px; border-top: 1px dashed #e2e8f0; }
-.update-entry { margin: 2px 0; }
+.update-entry { margin: 2px 0; padding: 2px 4px; border-radius: 4px; cursor: pointer; transition: background 0.2s; }
+.update-entry:hover { background: #f7fafc; }
 
 /* 筛选栏 */
-.filter-bar { display: flex; gap: 8px; margin-bottom: 16px; overflow-x: auto; padding-bottom: 4px; white-space: nowrap; }
-.filter-btn { padding: 8px 16px; border-radius: 20px; border: 2px solid #e8ecf1; background: white; font-size: 14px; cursor: pointer; transition: all 0.3s; }
+.filter-bar { display: flex; gap: 8px; margin-bottom: 16px; overflow-x: auto; padding-bottom: 4px; white-space: nowrap; align-items: center; }
+.filter-btn { padding: 8px 16px; border-radius: 20px; border: 2px solid #e8ecf1; background: white; font-size: 14px; cursor: pointer; transition: all 0.3s; display: inline-flex; align-items: center; gap: 4px; }
 .filter-btn.active { background: #667eea; color: white; border-color: #667eea; }
+.filter-btn.dragging { opacity: 0.6; border: 2px dashed #667eea; transform: scale(0.95); }
+.filter-btn.drag-over { border-top: 3px solid #667eea; margin-top: 4px; }
+.filter-drag-handle { color: #a0aec0; font-size: 12px; cursor: grab; padding: 2px; user-select: none; }
+.filter-drag-handle:active { cursor: grabbing; }
 
 /* 空状态 */
 .empty-state { text-align: center; padding: 60px 20px; color: #a0aec0; }
@@ -117,13 +125,6 @@ select { background: white; cursor: pointer; }
 .day-box.all-done { background: #c6f6d5; color: #276749; }
 .day-box.today { box-shadow: 0 0 0 2px #667eea; }
 .day-label { font-size: 11px; color: #a0aec0; margin-bottom: 4px; }
-
-/* 底部导航 */
-.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; display: flex; justify-content: space-around; padding: 8px 0; box-shadow: 0 -2px 12px rgba(0,0,0,0.08); z-index: 100; border-top: 1px solid #f0f0f0; }
-.nav-item { display: flex; flex-direction: column; align-items: center; gap: 2px; color: #a0aec0; font-size: 11px; cursor: pointer; transition: color 0.3s; padding: 4px 16px; position: relative; }
-.nav-item.active { color: #667eea; }
-.nav-icon { font-size: 22px; }
-.nav-badge { position: absolute; top: 0; right: 8px; background: #fc8181; color: white; font-size: 10px; font-weight: 600; min-width: 16px; height: 16px; border-radius: 8px; display: flex; align-items: center; justify-content: center; padding: 0 4px; }
 
 /* 模态框 */
 .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 200; display: none; justify-content: center; align-items: center; padding: 20px; }
@@ -188,7 +189,7 @@ select { background: white; cursor: pointer; }
 .tab-page.active { display: block; }
 
 /* 滚动容器 */
-.scroll-container { min-height: 100vh; padding-bottom: 80px; }
+.scroll-container { min-height: 100vh; padding-bottom: 40px; }
 
 /* 邮件选项 */
 .mail-option { display: flex; align-items: center; gap: 8px; margin-top: 8px; padding: 8px; background: #f7fafc; border-radius: 8px; }
@@ -221,6 +222,7 @@ select { background: white; cursor: pointer; }
 .weekly-task-table tr:nth-child(even) { background: #f7fafc; }
 .weekly-task-table .status-done { color: #48bb78; font-weight: 600; }
 .weekly-task-table .status-pending { color: #ed8936; }
+.weekly-task-table .history-cell { font-size: 12px; color: #718096; max-width: 300px; }
 
 /* 星期选择 */
 .weekday-select { display: flex; gap: 6px; flex-wrap: wrap; }
@@ -229,9 +231,9 @@ select { background: white; cursor: pointer; }
 .weekday-option input { width: 16px; height: 16px; cursor: pointer; }
 .weekday-option.selected { background: #ebf8ff; color: #3182ce; }
 
-/* 日期时间组 */
-.datetime-group { display: flex; gap: 10px; }
-.datetime-group input { flex: 1; }
+/* 两栏布局 */
+.two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+@media (max-width: 900px) { .two-column { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -279,20 +281,31 @@ select { background: white; cursor: pointer; }
 </div>
 
 <div id="appPage" class="app-container hidden">
+  <div class="top-nav">
+    <div class="top-nav-left">📋 工作排查登记</div>
+    <div class="top-nav-right">
+      <div class="top-nav-item active" data-tab="home" onclick="App.switchTab('home')"><span class="top-nav-icon">📝</span><span>任务</span></div>
+      <div class="top-nav-item" data-tab="weekly" onclick="App.switchTab('weekly')"><span class="top-nav-icon">📊</span><span>周报</span></div>
+      <div class="top-nav-item" data-tab="reminders" onclick="App.switchTab('reminders')"><span class="top-nav-icon">🔔</span><span>提醒</span><span class="nav-badge" id="navBadge" style="display:none;">0</span></div>
+      <div class="top-nav-item" data-tab="settings" onclick="App.switchTab('settings')"><span class="top-nav-icon">⚙️</span><span>设置</span></div>
+      <div class="top-nav-item" style="position:relative;" onclick="App.toggleUserMenu()">
+        <span id="topNavUserName">游客</span>
+        <div class="user-menu" id="userMenu" style="top:44px;right:-8px;">
+          <div class="user-menu-item" onclick="App.showUserInfo()">👤 账号信息</div>
+          <div class="user-menu-item" onclick="App.exportData()">📥 导出数据</div>
+          <div class="user-menu-divider"></div>
+          <div class="user-menu-item" onclick="App.logout()" style="color:#e53e3e">🚪 退出登录</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div id="homeTab" class="tab-page active">
     <div class="scroll-container">
       <div class="header-gradient">
         <div class="header-top">
           <div class="header-title">📋 工作排查登记</div>
-          <div class="header-user" onclick="App.toggleUserMenu()">
-            <span id="homeUserName">游客</span>
-            <div class="user-menu" id="userMenu">
-              <div class="user-menu-item" onclick="App.showUserInfo()">👤 账号信息</div>
-              <div class="user-menu-item" onclick="App.exportData()">📥 导出数据</div>
-              <div class="user-menu-divider"></div>
-              <div class="user-menu-item" onclick="App.logout()" style="color:#e53e3e">🚪 退出登录</div>
-            </div>
-          </div>
+          <div class="header-user" id="homeUserName">游客</div>
         </div>
         <div class="header-week" id="homeWeekInfo"></div>
         <div class="header-stats">
@@ -303,13 +316,19 @@ select { background: white; cursor: pointer; }
         </div>
       </div>
       <div class="container">
-        <div class="card">
-          <div class="input-group"><input type="text" class="input" id="taskInput" placeholder="输入新任务..." style="flex:2;" onkeydown="if(event.key==='Enter')App.addTask()"><select id="taskType" style="flex:0 0 100px;"><option value="daily">每日</option><option value="weekly">每周</option><option value="urgent">紧急</option></select></div>
-          <div class="input-group"><select id="taskCategory" style="flex:1;"></select><button class="btn btn-add btn-small" onclick="App.openCategoryModal()" style="flex:0 0 auto;">➕</button></div>
-          <div class="input-group"><input type="text" class="input" id="taskTag" placeholder="标签（可选）" onkeydown="if(event.key==='Enter')App.addTask()"></div>
-          <button class="btn btn-primary btn-block" onclick="App.addTask()">➕ 添加任务</button>
+        <div class="two-column">
+          <div class="card">
+            <div class="input-group"><input type="text" class="input" id="taskInput" placeholder="输入新任务..." style="flex:2;" onkeydown="if(event.key==='Enter')App.addTask()"><select id="taskType" style="flex:0 0 100px;"><option value="daily">每日</option><option value="weekly">每周</option><option value="urgent">紧急</option></select></div>
+            <div class="input-group"><select id="taskCategory" style="flex:1;"></select><button class="btn btn-add btn-small" onclick="App.openCategoryModal()" style="flex:0 0 auto;">➕</button></div>
+            <div class="input-group"><input type="text" class="input" id="taskTag" placeholder="标签（可选）" onkeydown="if(event.key==='Enter')App.addTask()"></div>
+            <button class="btn btn-primary btn-block" onclick="App.addTask()">➕ 添加任务</button>
+          </div>
+          <div class="card">
+            <div class="section-title">📊 快捷概览</div>
+            <div id="quickStats" style="font-size:14px;line-height:2;color:#4a5568;"></div>
+          </div>
         </div>
-        <div class="filter-bar" id="filterBar"></div>
+        <div class="filter-bar" id="filterBar" ondragover="App.onFilterDragOver(event)" ondrop="App.onFilterDrop(event)"></div>
         <div id="taskList"></div>
         <div class="empty-state" id="emptyState" style="display:none;"><div class="empty-icon">📝</div><div>还没有任务，添加一个吧！</div></div>
       </div>
@@ -347,22 +366,24 @@ select { background: white; cursor: pointer; }
     <div class="scroll-container">
       <div class="header-gradient"><div class="header-top"><div class="header-title">⚙️ 设置</div><div class="header-user" id="settingsUserName">游客</div></div></div>
       <div class="container">
-        <div class="card">
-          <div class="section-title">☁️ GitHub 云端同步</div>
-          <div class="hint">💡 绑定 GitHub 后，数据自动同步到云端，换设备登录自动拉取</div>
-          <div id="githubSyncPanel">
-            <div class="form-group"><label>GitHub Token</label><input type="password" class="input" id="githubToken" placeholder="粘贴 GitHub Personal Access Token"></div>
-            <div class="hint"><a class="link" href="https://github.com/settings/tokens" target="_blank">点击这里创建 Token</a>（勾选 gist 权限）</div>
-            <div style="display:flex;gap:10px;margin-top:12px;"><button class="btn btn-primary" style="flex:1;background:#2d3748;" onclick="App.saveGitHubToken()">🔗 绑定并同步</button><button class="btn btn-small btn-danger" onclick="App.clearGitHubToken()">解绑</button></div>
-            <div class="sync-status" id="syncStatus"></div>
-            <div id="lastSyncInfo" style="font-size:12px;color:#a0aec0;margin-top:4px;"></div>
+        <div class="two-column">
+          <div class="card">
+            <div class="section-title">☁️ GitHub 云端同步</div>
+            <div class="hint">💡 绑定 GitHub 后，数据自动同步到云端，换设备登录自动拉取</div>
+            <div id="githubSyncPanel">
+              <div class="form-group"><label>GitHub Token</label><input type="password" class="input" id="githubToken" placeholder="粘贴 GitHub Personal Access Token"></div>
+              <div class="hint"><a class="link" href="https://github.com/settings/tokens" target="_blank">点击这里创建 Token</a>（勾选 gist 权限）</div>
+              <div style="display:flex;gap:10px;margin-top:12px;"><button class="btn btn-primary" style="flex:1;background:#2d3748;" onclick="App.saveGitHubToken()">🔗 绑定并同步</button><button class="btn btn-small btn-danger" onclick="App.clearGitHubToken()">解绑</button></div>
+              <div class="sync-status" id="syncStatus"></div>
+              <div id="lastSyncInfo" style="font-size:12px;color:#a0aec0;margin-top:4px;"></div>
+            </div>
           </div>
-        </div>
-        <div class="card">
-          <div class="section-title">🏷️ 分类管理</div>
-          <div class="hint">💡 双击分类名称可直接修改，所有分类可删除</div>
-          <div class="input-group" style="margin-bottom:16px;"><input type="text" class="input" id="newCategoryInput" placeholder="输入新分类名称..." onkeydown="if(event.key==='Enter')App.addCustomCategory()"><button class="btn btn-add" onclick="App.addCustomCategory()" style="flex:0 0 auto;">添加</button></div>
-          <div class="category-list" id="categoryList"></div>
+          <div class="card">
+            <div class="section-title">🏷️ 分类管理</div>
+            <div class="hint">💡 双击分类名称可直接修改，所有分类可删除</div>
+            <div class="input-group" style="margin-bottom:16px;"><input type="text" class="input" id="newCategoryInput" placeholder="输入新分类名称..." onkeydown="if(event.key==='Enter')App.addCustomCategory()"><button class="btn btn-add" onclick="App.addCustomCategory()" style="flex:0 0 auto;">添加</button></div>
+            <div class="category-list" id="categoryList"></div>
+          </div>
         </div>
         <div class="card">
           <div class="section-title">💾 数据管理</div>
@@ -373,19 +394,13 @@ select { background: white; cursor: pointer; }
       </div>
     </div>
   </div>
-
-  <div class="bottom-nav">
-    <div class="nav-item active" data-tab="home" onclick="App.switchTab('home')"><span class="nav-icon">📝</span><span>任务</span></div>
-    <div class="nav-item" data-tab="weekly" onclick="App.switchTab('weekly')"><span class="nav-icon">📊</span><span>周报</span></div>
-    <div class="nav-item" data-tab="reminders" onclick="App.switchTab('reminders')"><span class="nav-icon">🔔</span><span>提醒</span><span class="nav-badge" id="navBadge" style="display:none;">0</span></div>
-    <div class="nav-item" data-tab="settings" onclick="App.switchTab('settings')"><span class="nav-icon">⚙️</span><span>设置</span></div>
-  </div>
 </div>
 
 <div class="modal-overlay" id="categoryModal" onclick="App.closeModal('categoryModal')"><div class="modal-card" onclick="event.stopPropagation()"><div class="modal-header"><div class="modal-title">➕ 添加自定义分类</div><div class="modal-close" onclick="App.closeModal('categoryModal')">×</div></div><div class="form-group"><label>分类名称</label><input type="text" class="input" id="categoryModalInput" placeholder="例如：消防工程、智能化..." onkeydown="if(event.key==='Enter')App.confirmAddCategory()"></div><button class="btn btn-primary btn-block" onclick="App.confirmAddCategory()">确认添加</button></div></div>
 <div class="modal-overlay" id="updateModal" onclick="App.closeModal('updateModal')"><div class="modal-card" onclick="event.stopPropagation()"><div class="modal-header"><div class="modal-title">🔄 更新任务进度</div><div class="modal-close" onclick="App.closeModal('updateModal')">×</div></div><div class="form-group"><label>进度更新</label><textarea class="input" id="updateText" placeholder="记录今天的进展..." style="min-height:100px;resize:vertical;"></textarea></div><div class="form-group"><label>状态</label><select id="updateStatus" class="input"><option value="progress">进行中</option><option value="completed">已完成</option><option value="blocked">受阻/需协助</option></select></div><button class="btn btn-primary btn-block" onclick="App.saveUpdate()">保存更新</button></div></div>
 <div class="modal-overlay" id="editCategoryModal" onclick="App.closeModal('editCategoryModal')"><div class="modal-card" onclick="event.stopPropagation()"><div class="modal-header"><div class="modal-title">✏️ 修改分类名称</div><div class="modal-close" onclick="App.closeModal('editCategoryModal')">×</div></div><div class="form-group"><label>新名称</label><input type="text" class="input" id="editCategoryInput" placeholder="输入新名称" onkeydown="if(event.key==='Enter')App.confirmEditCategory()"></div><button class="btn btn-primary btn-block" onclick="App.confirmEditCategory()">确认修改</button></div></div>
 <div class="modal-overlay" id="taskReminderModal" onclick="App.closeModal('taskReminderModal')"><div class="modal-card" onclick="event.stopPropagation()"><div class="modal-header"><div class="modal-title">⏰ 设置任务提醒</div><div class="modal-close" onclick="App.closeModal('taskReminderModal')">×</div></div><div class="form-group"><label>任务名称</label><div id="taskReminderName" style="padding:12px;background:#f7fafc;border-radius:8px;font-size:15px;color:#4a5568;"></div></div><div class="form-group" style="display:flex;justify-content:space-between;align-items:center;"><label style="margin-bottom:0;">启用提醒</label><div class="toggle-switch" id="taskReminderToggle" onclick="App.toggleTaskReminderEnabled()"></div></div><div id="reminderOptionsPanel"><div class="form-group"><label>重复周期</label><select class="input" id="taskReminderRepeat" onchange="App.onReminderRepeatChange()"><option value="once">一次</option><option value="daily">每天</option><option value="weekly">每周</option></select></div><div class="form-group" id="onceDateGroup"><label>提醒日期</label><input type="date" class="input" id="taskReminderDate"></div><div class="form-group" id="onceTimeGroup"><label>提醒时间</label><input type="time" class="input" id="taskReminderTime"></div><div class="form-group" id="weeklyDayGroup" style="display:none;"><label>选择星期几</label><div class="weekday-select" id="weekdaySelect"><label class="weekday-option"><input type="checkbox" class="weekly-day-check" value="1">周一</label><label class="weekday-option"><input type="checkbox" class="weekly-day-check" value="2">周二</label><label class="weekday-option"><input type="checkbox" class="weekly-day-check" value="3">周三</label><label class="weekday-option"><input type="checkbox" class="weekly-day-check" value="4">周四</label><label class="weekday-option"><input type="checkbox" class="weekly-day-check" value="5">周五</label><label class="weekday-option"><input type="checkbox" class="weekly-day-check" value="6">周六</label><label class="weekday-option"><input type="checkbox" class="weekly-day-check" value="7">周日</label></div></div><div class="mail-option"><input type="checkbox" id="taskReminderMail"><label for="taskReminderMail" style="font-size:13px;color:#4a5568;cursor:pointer;">邮件提醒</label></div></div><div style="display:flex;gap:10px;margin-top:16px;"><button class="btn btn-primary" style="flex:1;" onclick="App.saveTaskReminder()">保存</button><button class="btn" style="flex:1;background:#e2e8f0;color:#4a5568;" onclick="App.closeModal('taskReminderModal')">取消</button></div></div></div>
+<div class="modal-overlay" id="editUpdateModal" onclick="App.closeModal('editUpdateModal')"><div class="modal-card" onclick="event.stopPropagation()"><div class="modal-header"><div class="modal-title">✏️ 修改更新记录</div><div class="modal-close" onclick="App.closeModal('editUpdateModal')">×</div></div><div class="form-group"><label>更新内容</label><textarea class="input" id="editUpdateText" placeholder="修改更新内容..." style="min-height:100px;resize:vertical;"></textarea></div><div class="form-group"><label>状态</label><select id="editUpdateStatus" class="input"><option value="progress">进行中</option><option value="completed">已完成</option><option value="blocked">受阻/需协助</option></select></div><button class="btn btn-primary btn-block" onclick="App.saveEditUpdate()">保存修改</button></div></div>
 
 <script>
 const App = (function() {
@@ -409,10 +424,13 @@ const App = (function() {
   let customCategories = [];
   let taskReminders = {};
   let activeReminders = [];
+  let categoryOrder = [];
   let currentFilter = 'all';
   let editingTaskId = null;
   let editingCategoryId = null;
   let editingTaskReminderId = null;
+  let editingUpdateTaskId = null;
+  let editingUpdateIndex = null;
   let reminderTimer = null;
   let githubToken = null;
   let githubGistId = null;
@@ -420,10 +438,7 @@ const App = (function() {
   let syncInProgress = false;
   let checkedMinutes = new Set();
   
-  let dragSrcId = null;
-  let touchDragId = null;
-  let touchDragTimer = null;
-  let isTouchDragging = false;
+  let filterDragSrcKey = null;
   
   function showToast(msg) { const toast = document.getElementById('toast'); toast.textContent = msg; toast.classList.add('active'); setTimeout(() => toast.classList.remove('active'), 2000); }
   function showError(id, msg) { const el = document.getElementById(id); el.textContent = msg; el.classList.add('show'); }
@@ -439,7 +454,19 @@ const App = (function() {
   function checkAutoLogin() { const s = localStorage.getItem(CONFIG.STORAGE_SESSION); if (!s) return; try { const u = JSON.parse(s); if (u.isGuest) { clearLocalSession(); return; } const db = getUsersDB(); if (db[u.username]) { currentUser = u; } } catch(e) { clearLocalSession(); } }
   function showAuth() { document.getElementById('authPage').classList.remove('hidden'); document.getElementById('appPage').classList.add('hidden'); }
   function showApp() { document.getElementById('authPage').classList.add('hidden'); document.getElementById('appPage').classList.remove('hidden'); switchTab('home'); startReminderCheck(); }
-  function init() { checkAutoLogin(); loadGitHubConfig(); if (currentUser) { loadAllData(); } else { showAuth(); } }
+  function init() { checkAutoLogin(); loadGitHubConfig(); initCategoryOrder(); if (currentUser) { loadAllData(); } else { showAuth(); } }
+  
+  function initCategoryOrder() {
+    const cats = getAllCategories();
+    const allKeys = Object.keys(cats);
+    if (categoryOrder.length === 0) {
+      categoryOrder = allKeys;
+    } else {
+      const missing = allKeys.filter(k => !categoryOrder.includes(k));
+      categoryOrder = categoryOrder.filter(k => allKeys.includes(k));
+      categoryOrder = categoryOrder.concat(missing);
+    }
+  }
   
   function loadGitHubConfig() { const saved = localStorage.getItem(CONFIG.STORAGE_GITHUB); if (saved) { try { const c = JSON.parse(saved); githubToken = c.token || null; githubGistId = c.gistId || null; } catch(e) {} } }
   function saveGitHubConfig() { localStorage.setItem(CONFIG.STORAGE_GITHUB, JSON.stringify({ token: githubToken, gistId: githubGistId })); }
@@ -469,7 +496,7 @@ const App = (function() {
       if (!githubGistId) await findOrCreateGist();
       if (!githubGistId) { syncInProgress = false; updateSyncStatus('error'); return; }
       const db = getUsersDB();
-      const payload = { tasks, customCategories, taskReminders, activeReminders, version: '3.0', syncedAt: new Date().toISOString() };
+      const payload = { tasks, customCategories, taskReminders, activeReminders, categoryOrder, version: '4.0', syncedAt: new Date().toISOString() };
       await apiRequest(`https://api.github.com/gists/${githubGistId}`, 'PATCH', { files: { [GIST_FILE_NAME]: { content: JSON.stringify(payload, null, 2) }, [USERS_DB_GIST_FILE]: { content: JSON.stringify(db, null, 2) } } });
       lastSyncTime = new Date(); updateSyncStatus('synced');
     } catch(e) { updateSyncStatus('error'); showToast('同步失败: ' + e.message); }
@@ -495,6 +522,8 @@ const App = (function() {
         if (data.customCategories) customCategories = data.customCategories;
         if (data.taskReminders) taskReminders = data.taskReminders;
         if (data.activeReminders) activeReminders = data.activeReminders;
+        if (data.categoryOrder) categoryOrder = data.categoryOrder;
+        initCategoryOrder();
         lastSyncTime = new Date(); updateSyncStatus('synced'); showToast('数据已从云端同步'); return true;
       }
     } catch(e) { updateSyncStatus('error'); showToast('拉取失败: ' + e.message); }
@@ -502,16 +531,20 @@ const App = (function() {
   }
   
   async function syncUsersDBToGitHub() {
-    if (!githubToken || !githubGistId) return;
+    if (!githubToken) return;
     try {
+      if (!githubGistId) await findOrCreateGist();
+      if (!githubGistId) return;
       const db = getUsersDB();
       await apiRequest(`https://api.github.com/gists/${githubGistId}`, 'PATCH', { files: { [USERS_DB_GIST_FILE]: { content: JSON.stringify(db, null, 2) } } });
     } catch(e) {}
   }
   
   async function syncUsersDBFromGitHub() {
-    if (!githubToken || !githubGistId) return;
+    if (!githubToken) return;
     try {
+      if (!githubGistId) await findOrCreateGist();
+      if (!githubGistId) return;
       const gist = await apiRequest(`https://api.github.com/gists/${githubGistId}`, 'GET');
       const usersFile = gist.files[USERS_DB_GIST_FILE];
       if (usersFile && usersFile.content && usersFile.content !== '{}') {
@@ -575,100 +608,53 @@ const App = (function() {
     hideError('registerError');
   }
   function guestLogin() { currentUser = { username: 'guest_' + Date.now(), isGuest: true }; loadAllData(); showApp(); showToast('游客模式'); }
-  function handleImportOnLogin(input) { const file = input.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = function(e) { try { const data = JSON.parse(e.target.result); if (!data.tasks) { showToast('文件格式错误'); return; } const username = data.username || 'imported_' + Date.now(), db = getUsersDB(); if (!db[username]) { db[username] = { password: 'imported', created: new Date().toISOString() }; saveUsersDB(db); } if (data.tasks) tasks = data.tasks; if (data.customCategories) customCategories = data.customCategories; if (data.taskReminders) taskReminders = data.taskReminders; if (data.activeReminders) activeReminders = data.activeReminders; currentUser = { username: username, isGuest: false }; saveLocalSession(); showApp(); showToast('数据导入成功'); } catch(err) { showToast('文件格式错误'); } }; reader.readAsText(file); input.value = ''; }
+  function handleImportOnLogin(input) { const file = input.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = function(e) { try { const data = JSON.parse(e.target.result); if (!data.tasks) { showToast('文件格式错误'); return; } const username = data.username || 'imported_' + Date.now(), db = getUsersDB(); if (!db[username]) { db[username] = { password: 'imported', created: new Date().toISOString() }; saveUsersDB(db); } if (data.tasks) tasks = data.tasks; if (data.customCategories) customCategories = data.customCategories; if (data.taskReminders) taskReminders = data.taskReminders; if (data.activeReminders) activeReminders = data.activeReminders; if (data.categoryOrder) categoryOrder = data.categoryOrder; currentUser = { username: username, isGuest: false }; saveLocalSession(); showApp(); showToast('数据导入成功'); } catch(err) { showToast('文件格式错误'); } }; reader.readAsText(file); input.value = ''; }
   function logout() { if (!confirm('确定要退出吗？')) return; currentUser = null; clearLocalSession(); location.reload(); }
   
   function saveGitHubToken() { const token = document.getElementById('githubToken').value.trim(); if (!token) { showToast('请输入 GitHub Token'); return; } githubToken = token; saveGitHubConfig(); syncToGitHub(); showToast('GitHub 已绑定'); document.getElementById('githubToken').value = ''; }
   function clearGitHubToken() { if (!githubToken) return; if (!confirm('解绑后该设备不再自动同步，确定解绑？')) return; githubToken = null; githubGistId = null; saveGitHubConfig(); updateSyncStatus(); showToast('已解绑'); }
   
-  function switchTab(tab) { saveAllData(); document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active')); document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); document.getElementById(tab + 'Tab').classList.add('active'); document.querySelector('.nav-item[data-tab="' + tab + '"]').classList.add('active'); if (tab === 'home') renderHome(); else if (tab === 'weekly') renderWeekly(); else if (tab === 'reminders') renderReminders(); else if (tab === 'settings') renderSettings(); window.scrollTo(0, 0); }
+  function switchTab(tab) { saveAllData(); document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active')); document.querySelectorAll('.top-nav-item').forEach(n => n.classList.remove('active')); document.getElementById(tab + 'Tab').classList.add('active'); document.querySelector('.top-nav-item[data-tab="' + tab + '"]').classList.add('active'); if (tab === 'home') renderHome(); else if (tab === 'weekly') renderWeekly(); else if (tab === 'reminders') renderReminders(); else if (tab === 'settings') renderSettings(); window.scrollTo(0, 0); }
   
-  function reorderTasks(srcId, targetId) {
-    srcId = Number(srcId); targetId = Number(targetId);
-    const srcIndex = tasks.findIndex(t => t.id === srcId);
-    const targetIndex = tasks.findIndex(t => t.id === targetId);
-    if (srcIndex > -1 && targetIndex > -1 && srcIndex !== targetIndex) {
-      const [moved] = tasks.splice(srcIndex, 1);
-      tasks.splice(targetIndex, 0, moved);
-      saveAllData();
-      renderHome();
-      showToast('位置已调整');
-    }
-  }
-  
-  function onDragStart(e, id) {
-    dragSrcId = id;
+  function onFilterDragStart(e, key) {
+    filterDragSrcKey = key;
     e.target.classList.add('dragging');
     e.dataTransfer.effectAllowed = 'move';
   }
-  function onDragEnd(e) {
+  function onFilterDragEnd(e) {
     e.target.classList.remove('dragging');
-    document.querySelectorAll('.task-card').forEach(c => c.classList.remove('drag-over'));
-    dragSrcId = null;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('drag-over'));
+    filterDragSrcKey = null;
   }
-  function onDragOver(e) {
+  function onFilterDragOver(e) {
     e.preventDefault();
-    const card = e.target.closest('.task-card');
-    if (card) {
-      document.querySelectorAll('.task-card').forEach(c => c.classList.remove('drag-over'));
-      if (card.dataset.id != dragSrcId) card.classList.add('drag-over');
+    const btn = e.target.closest('.filter-btn[data-catkey]');
+    if (btn) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('drag-over'));
+      if (btn.dataset.catkey !== filterDragSrcKey) btn.classList.add('drag-over');
     }
   }
-  function onDrop(e, targetId) {
+  function onFilterDrop(e, targetKey) {
     e.preventDefault();
-    document.querySelectorAll('.task-card').forEach(c => c.classList.remove('drag-over'));
-    if (dragSrcId && targetId && dragSrcId != targetId) {
-      reorderTasks(dragSrcId, targetId);
-    }
-    dragSrcId = null;
-  }
-  
-  function onTouchStart(e, id) {
-    touchDragTimer = setTimeout(() => {
-      touchDragId = id;
-      isTouchDragging = true;
-      const card = document.querySelector(`.task-card[data-id="${id}"]`);
-      if (card) {
-        card.classList.add('dragging');
-        if (navigator.vibrate) navigator.vibrate(50);
-      }
-    }, 500);
-  }
-  function onTouchMove(e) {
-    if (!isTouchDragging || !touchDragId) return;
-    e.preventDefault();
-    const touch = e.touches[0];
-    const element = document.elementFromPoint(touch.clientX, touch.clientY);
-    if (!element) return;
-    const card = element.closest('.task-card');
-    document.querySelectorAll('.task-card').forEach(c => c.classList.remove('drag-over'));
-    if (card && card.dataset.id != touchDragId) {
-      card.classList.add('drag-over');
-    }
-  }
-  function onTouchEnd(e) {
-    clearTimeout(touchDragTimer);
-    if (!isTouchDragging || !touchDragId) {
-      isTouchDragging = false;
-      touchDragId = null;
-      return;
-    }
-    const touch = e.changedTouches[0];
-    const element = document.elementFromPoint(touch.clientX, touch.clientY);
-    if (element) {
-      const card = element.closest('.task-card');
-      if (card && card.dataset.id != touchDragId) {
-        reorderTasks(touchDragId, card.dataset.id);
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('drag-over'));
+    if (filterDragSrcKey && targetKey && filterDragSrcKey !== targetKey) {
+      const srcIndex = categoryOrder.indexOf(filterDragSrcKey);
+      const targetIndex = categoryOrder.indexOf(targetKey);
+      if (srcIndex > -1 && targetIndex > -1) {
+        categoryOrder.splice(srcIndex, 1);
+        categoryOrder.splice(targetIndex, 0, filterDragSrcKey);
+        saveAllData();
+        renderHome();
+        showToast('分类顺序已调整');
       }
     }
-    document.querySelectorAll('.task-card').forEach(c => c.classList.remove('dragging', 'drag-over'));
-    isTouchDragging = false;
-    touchDragId = null;
+    filterDragSrcKey = null;
   }
   
   function renderHome() {
     const dn = currentUser && !currentUser.isGuest ? currentUser.username : '游客';
     document.getElementById('homeUserName').textContent = dn;
+    document.getElementById('topNavUserName').textContent = dn;
     document.getElementById('homeWeekInfo').textContent = getWeekInfo();
     const total = tasks.length, done = tasks.filter(t => t.completed).length, urgent = tasks.filter(t => t.type === 'urgent' && !t.completed).length;
     document.getElementById('statTotal').textContent = total;
@@ -678,9 +664,17 @@ const App = (function() {
     const cats = getAllCategories();
     const catSelect = document.getElementById('taskCategory');
     catSelect.innerHTML = Object.entries(cats).map(([k, v]) => `<option value="${k}">${v}</option>`).join('');
+    
+    const qs = document.getElementById('quickStats');
+    if (qs) qs.innerHTML = `📊 总任务: ${total} 项<br>✅ 已完成: ${done} 项<br>⏰ 待办: ${total - done} 项<br>🔴 紧急: ${urgent} 项<br>📁 分类: ${Object.keys(cats).length} 个`;
+    
+    initCategoryOrder();
     let fb = `<button class="filter-btn ${currentFilter === 'all' ? 'active' : ''}" onclick="App.setFilter('all')">全部</button><button class="filter-btn ${currentFilter === 'pending' ? 'active' : ''}" onclick="App.setFilter('pending')">待办</button><button class="filter-btn ${currentFilter === 'completed' ? 'active' : ''}" onclick="App.setFilter('completed')">已完成</button><button class="filter-btn ${currentFilter === 'urgent' ? 'active' : ''}" onclick="App.setFilter('urgent')">紧急</button>`;
-    Object.entries(cats).forEach(([k, v]) => { if (k !== 'general') fb += `<button class="filter-btn ${currentFilter === k ? 'active' : ''}" onclick="App.setFilter('${k}')">${v}</button>`; });
+    categoryOrder.forEach(k => {
+      if (cats[k]) fb += `<button class="filter-btn ${currentFilter === k ? 'active' : ''}" data-catkey="${k}" draggable="true" ondragstart="App.onFilterDragStart(event, '${k}')" ondragend="App.onFilterDragEnd(event)" ondrop="App.onFilterDrop(event, '${k}')">${cats[k]}</button>`;
+    });
     document.getElementById('filterBar').innerHTML = fb;
+    
     let filtered = tasks;
     if (currentFilter === 'pending') filtered = tasks.filter(t => !t.completed);
     else if (currentFilter === 'completed') filtered = tasks.filter(t => t.completed);
@@ -693,9 +687,9 @@ const App = (function() {
     listEl.innerHTML = sorted.map(task => {
       const date = new Date(task.created), dateStr = `${date.getMonth()+1}/${date.getDate()} ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
       const updates = task.updates || [];
-      const updateLogs = updates.slice(-3).map(u => { const d = new Date(u.time); const icon = u.status === 'completed' ? '✅' : u.status === 'blocked' ? '⚠️' : '🔄'; return `<div class="update-entry">${icon} ${d.getMonth()+1}/${d.getDate()} ${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')} - ${u.text}</div>`; }).join('');
+      const updateLogs = updates.slice(-3).map((u, idx) => { const d = new Date(u.time); const icon = u.status === 'completed' ? '✅' : u.status === 'blocked' ? '⚠️' : '🔄'; return `<div class="update-entry" ondblclick="App.openEditUpdateModal(${task.id}, ${idx})">${icon} ${d.getMonth()+1}/${d.getDate()} ${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')} - ${escapeHtml(u.text)}</div>`; }).join('');
       const hasReminder = taskReminders[task.id] && taskReminders[task.id].enabled;
-      return `<div class="task-card ${task.completed ? 'completed' : ''} ${task.type === 'urgent' && !task.completed ? 'urgent' : ''}" data-id="${task.id}" draggable="true" ondragstart="App.onDragStart(event, ${task.id})" ondragend="App.onDragEnd(event)" ondragover="App.onDragOver(event)" ondrop="App.onDrop(event, ${task.id})" ontouchstart="App.onTouchStart(event, ${task.id})" ontouchmove="App.onTouchMove(event)" ontouchend="App.onTouchEnd(event)"><div style="display:flex;align-items:center;"><div class="drag-handle">⋮⋮</div><div style="flex:1;min-width:0;"><div class="task-header"><span class="task-title" id="taskTitle-${task.id}" ondblclick="App.startEditTaskName(${task.id})">${hasReminder ? '🔔 ' : ''}${escapeHtml(task.text)}</span><div style="display:flex;gap:4px;flex-wrap:wrap;"><span class="tag ${task.type === 'daily' ? 'tag-daily' : task.type === 'weekly' ? 'tag-weekly' : 'tag-urgent'}">${TYPE_MAP[task.type]}</span><span class="tag tag-category">${cats[task.category] || '一般'}</span>${task.tag ? `<span class="tag tag-user">#${escapeHtml(task.tag)}</span>` : ''}</div></div><div class="task-meta"><span>📅 ${dateStr}</span>${task.completed ? '<span class="tag tag-completed">已完成</span>' : ''}</div>${updateLogs ? `<div class="update-log">${updateLogs}</div>` : ''}</div></div><div class="task-actions"><button class="btn btn-small btn-success" onclick="App.openUpdateModal(${task.id})">🔄 更新</button><button class="btn btn-small ${task.completed ? 'btn-warning' : 'btn-success'}" onclick="App.toggleComplete(${task.id})">${task.completed ? '↩️ 恢复' : '✅ 完成'}</button><button class="btn btn-small btn-add" onclick="App.openTaskReminderModal(${task.id})">⏰ 提醒</button><button class="btn btn-small btn-danger" onclick="App.deleteTask(${task.id})">🗑️ 删除</button></div></div>`;
+      return `<div class="task-card ${task.completed ? 'completed' : ''} ${task.type === 'urgent' && !task.completed ? 'urgent' : ''}"><div class="task-header"><span class="task-title" id="taskTitle-${task.id}" ondblclick="App.startEditTaskName(${task.id})">${hasReminder ? '🔔 ' : ''}${escapeHtml(task.text)}</span><div style="display:flex;gap:4px;flex-wrap:wrap;"><span class="tag ${task.type === 'daily' ? 'tag-daily' : task.type === 'weekly' ? 'tag-weekly' : 'tag-urgent'}">${TYPE_MAP[task.type]}</span><span class="tag tag-category">${cats[task.category] || '一般'}</span>${task.tag ? `<span class="tag tag-user">#${escapeHtml(task.tag)}</span>` : ''}</div></div><div class="task-meta"><span>📅 ${dateStr}</span>${task.completed ? '<span class="tag tag-completed">已完成</span>' : ''}</div>${updateLogs ? `<div class="update-log">${updateLogs}</div>` : ''}<div class="task-actions"><button class="btn btn-small btn-success" onclick="App.openUpdateModal(${task.id})">🔄 更新</button><button class="btn btn-small ${task.completed ? 'btn-warning' : 'btn-success'}" onclick="App.toggleComplete(${task.id})">${task.completed ? '↩️ 恢复' : '✅ 完成'}</button><button class="btn btn-small btn-add" onclick="App.openTaskReminderModal(${task.id})">⏰ 提醒</button><button class="btn btn-small btn-danger" onclick="App.deleteTask(${task.id})">🗑️ 删除</button></div></div>`;
     }).join('');
   }
   function setFilter(filter) { currentFilter = filter; renderHome(); }
@@ -705,8 +699,32 @@ const App = (function() {
   function deleteTask(id) { if (!confirm('确定要删除这个任务吗？')) return; tasks = tasks.filter(t => t.id !== id); delete taskReminders[id]; saveAllData(); renderHome(); showToast('已删除'); }
   function openUpdateModal(id) { editingTaskId = id; document.getElementById('updateText').value = ''; document.getElementById('updateStatus').value = 'progress'; document.getElementById('updateModal').classList.add('active'); }
   function saveUpdate() { const text = document.getElementById('updateText').value.trim(); if (!text) { showToast('请输入更新内容'); return; } const task = tasks.find(t => t.id === editingTaskId); if (!task) return; task.updates = task.updates || []; const status = document.getElementById('updateStatus').value; task.updates.push({ time: new Date().toISOString(), text: text, status: status }); if (status === 'completed') task.completed = true; saveAllData(); closeModal('updateModal'); editingTaskId = null; renderHome(); showToast('任务已更新'); }
+  function openEditUpdateModal(taskId, updateIndex) {
+    const task = tasks.find(t => t.id === taskId);
+    if (!task || !task.updates || !task.updates[updateIndex]) return;
+    const u = task.updates[updateIndex];
+    editingUpdateTaskId = taskId;
+    editingUpdateIndex = updateIndex;
+    document.getElementById('editUpdateText').value = u.text;
+    document.getElementById('editUpdateStatus').value = u.status || 'progress';
+    document.getElementById('editUpdateModal').classList.add('active');
+  }
+  function saveEditUpdate() {
+    const text = document.getElementById('editUpdateText').value.trim();
+    if (!text) { showToast('请输入更新内容'); return; }
+    const task = tasks.find(t => t.id === editingUpdateTaskId);
+    if (!task || !task.updates || !task.updates[editingUpdateIndex]) { closeModal('editUpdateModal'); return; }
+    task.updates[editingUpdateIndex].text = text;
+    task.updates[editingUpdateIndex].status = document.getElementById('editUpdateStatus').value;
+    saveAllData();
+    closeModal('editUpdateModal');
+    editingUpdateTaskId = null;
+    editingUpdateIndex = null;
+    renderHome();
+    showToast('更新记录已修改');
+  }
   function openCategoryModal() { document.getElementById('categoryModalInput').value = ''; document.getElementById('categoryModal').classList.add('active'); setTimeout(() => document.getElementById('categoryModalInput').focus(), 100); }
-  function confirmAddCategory() { const name = document.getElementById('categoryModalInput').value.trim(); if (!name) { showToast('请输入分类名称'); return; } const cats = getAllCategories(); if (Object.values(cats).includes(name)) { showToast('该分类已存在'); return; } customCategories.push({ id: 'cat_' + Date.now(), name }); saveAllData(); renderHome(); closeModal('categoryModal'); showToast('分类已添加'); }
+  function confirmAddCategory() { const name = document.getElementById('categoryModalInput').value.trim(); if (!name) { showToast('请输入分类名称'); return; } const cats = getAllCategories(); if (Object.values(cats).includes(name)) { showToast('该分类已存在'); return; } const newId = 'cat_' + Date.now(); customCategories.push({ id: newId, name }); categoryOrder.push(newId); saveAllData(); renderHome(); closeModal('categoryModal'); showToast('分类已添加'); }
   function toggleUserMenu() { document.getElementById('userMenu').classList.toggle('show'); }
   function showUserInfo() { document.getElementById('userMenu').classList.remove('show'); const total = tasks.length, done = tasks.filter(t => t.completed).length, isGuest = currentUser && currentUser.isGuest; alert(`用户名：${isGuest ? '游客（临时）' : currentUser.username}\n类型：${isGuest ? '游客模式' : '注册用户'}\n总任务：${total} 项\n已完成：${done} 项\n完成率：${total > 0 ? Math.round(done/total*100) : 0}%\n${githubToken ? '✅ 已绑定 GitHub 云端同步' : '⚠️ 未绑定 GitHub 云端同步'}`); }
   function exportData() { document.getElementById('userMenu').classList.remove('show'); backupData(); }
@@ -768,13 +786,16 @@ const App = (function() {
     const now = new Date(), ws = new Date(now); ws.setDate(now.getDate() - now.getDay() + 1); const days = ['一','二','三','四','五','六','日'], today = now.getDay(); document.getElementById('weekGrid').innerHTML = days.map((day, i) => { const date = new Date(ws); date.setDate(ws.getDate() + i); const dateStr = date.toDateString(); const dayTasks = tasks.filter(t => { const td = new Date(t.created); return td.toDateString() === dateStr; }); const done = dayTasks.filter(t => t.completed).length, total = dayTasks.length; const isToday = (i === 0 && today === 1) || (i === 1 && today === 2) || (i === 2 && today === 3) || (i === 3 && today === 4) || (i === 4 && today === 5) || (i === 5 && today === 6) || (i === 6 && today === 0); return `<div class="day-box ${total > 0 ? (done === total ? 'all-done' : 'has-task') : ''} ${isToday ? 'today' : ''}"><div class="day-label">周${day}</div><div style="font-size:18px;font-weight:600;">${date.getDate()}</div><div style="font-size:11px;margin-top:2px;">${total > 0 ? done + '/' + total : '-'}</div></div>`; }).join('');
     const total = tasks.length, done = tasks.filter(t => t.completed).length, pending = tasks.filter(t => !t.completed), urgent = pending.filter(t => t.type === 'urgent'), rate = total > 0 ? Math.round(done/total*100) : 0;
     const cats = getAllCategories();
-    const pendingRows = pending.length > 0 ? pending.map(t => `<tr><td>${escapeHtml(t.text)}</td><td>${TYPE_MAP[t.type] || t.type}</td><td>${cats[t.category] || '一般'}</td><td class="${t.type === 'urgent' ? 'status-pending' : ''}">${t.type === 'urgent' ? '🔴 紧急' : '⏳ 进行中'}</td></tr>`).join('') : '<tr><td colspan="4" style="text-align:center;color:#a0aec0;padding:16px;">暂无待办任务 🎉</td></tr>';
-    document.getElementById('weeklyStats').innerHTML = `<table class="stats-table"><tr><th style="width:30%">项目</th><th style="width:20%">数值</th></tr><tr><td>📊 总任务数</td><td>${total} 项</td></tr><tr><td>✅ 已完成</td><td>${done} 项</td></tr><tr><td>⏳ 待完成</td><td>${pending.length} 项</td></tr><tr><td>🔴 紧急任务</td><td style="color:#c53030;">${urgent.length} 项</td></tr><tr><td>完成率</td><td style="color:#667eea;">${rate}%</td></tr></table><div style="margin-top:16px;padding-top:16px;border-top:1px solid #e2e8f0;"><div style="font-weight:600;margin-bottom:8px;">📝 待办清单</div><table class="weekly-task-table"><tr><th>任务</th><th>类型</th><th>分类</th><th>状态</th></tr>${pendingRows}</table></div>`;
+    const allRows = tasks.length > 0 ? tasks.map(t => {
+      const history = t.updates && t.updates.length > 0 ? t.updates.slice(-2).map(u => { const d = new Date(u.time); const icon = u.status === 'completed' ? '✅' : u.status === 'blocked' ? '⚠️' : '🔄'; return `${icon} ${d.getMonth()+1}/${d.getDate()} ${escapeHtml(u.text)}`; }).join('<br>') : '无更新';
+      return `<tr><td>${escapeHtml(t.text)}</td><td>${TYPE_MAP[t.type] || t.type}</td><td>${cats[t.category] || '一般'}</td><td class="${t.completed ? 'status-done' : 'status-pending'}">${t.completed ? '✅ 已完成' : t.type === 'urgent' ? '🔴 紧急' : '⏳ 进行中'}</td><td class="history-cell">${history}</td></tr>`;
+    }).join('') : '<tr><td colspan="5" style="text-align:center;color:#a0aec0;padding:16px;">暂无任务</td></tr>';
+    document.getElementById('weeklyStats').innerHTML = `<table class="stats-table"><tr><th style="width:30%">项目</th><th style="width:20%">数值</th></tr><tr><td>📊 总任务数</td><td>${total} 项</td></tr><tr><td>✅ 已完成</td><td>${done} 项</td></tr><tr><td>⏳ 待完成</td><td>${pending.length} 项</td></tr><tr><td>🔴 紧急任务</td><td style="color:#c53030;">${urgent.length} 项</td></tr><tr><td>完成率</td><td style="color:#667eea;">${rate}%</td></tr></table><div style="margin-top:16px;padding-top:16px;border-top:1px solid #e2e8f0;"><div style="font-weight:600;margin-bottom:8px;">📝 全部任务清单</div><table class="weekly-task-table"><tr><th>任务</th><th>类型</th><th>分类</th><th>状态</th><th>跟进历史</th></tr>${allRows}</table></div>`;
     const catCounts = {}; tasks.forEach(t => { catCounts[t.category] = (catCounts[t.category] || 0) + 1; });
     document.getElementById('categoryStats').innerHTML = Object.entries(catCounts).map(([k, v]) => { const catDone = tasks.filter(t => t.category === k && t.completed).length, catRate = v > 0 ? Math.round(catDone/v*100) : 0; return `<div style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;"><span>• ${cats[k] || k}</span><span>${catDone}/${v} (${catRate}%)</span></div><div class="progress-bar"><div class="progress-bar-fill" style="width:${catRate}%;"></div></div></div>`; }).join('');
   }
-  function exportExcel() { const cats = getAllCategories(), now = new Date(), ws = new Date(now); ws.setDate(now.getDate() - now.getDay() + 1); const we = new Date(ws); we.setDate(ws.getDate() + 6); const userLabel = currentUser && !currentUser.isGuest ? currentUser.username : '游客'; const done = tasks.filter(t => t.completed).length, total = tasks.length, pending = tasks.filter(t => !t.completed), urgent = pending.filter(t => t.type === 'urgent'); let csv = '\uFEFF'; csv += `工作排查周报 ${ws.getMonth()+1}月${ws.getDate()}日-${we.getMonth()+1}月${we.getDate()}日\n`; csv += `用户：${userLabel}\n\n`; csv += `统计概览\n`; csv += `总任务数,${total}\n`; csv += `已完成,${done}\n`; csv += `完成率,${total > 0 ? Math.round(done/total*100) : 0}%\n`; csv += `待完成,${pending.length}\n`; csv += `紧急任务,${urgent.length}\n\n`; csv += `任务明细\n`; csv += `序号,任务内容,类型,分类,标签,状态,创建时间,最新更新\n`; tasks.forEach((t, i) => { const status = t.completed ? '已完成' : '进行中'; const created = new Date(t.created).toLocaleString('zh-CN'); const lastUpdate = t.updates && t.updates.length > 0 ? new Date(t.updates[t.updates.length-1].time).toLocaleString('zh-CN') + ': ' + t.updates[t.updates.length-1].text : '无更新'; csv += `${i+1},"${t.text}",${TYPE_MAP[t.type] || t.type},${cats[t.category] || '一般'},${t.tag || '-'},${status},${created},"${lastUpdate}"\n`; }); const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `工作周报_${userLabel}_${ws.getMonth()+1}月${ws.getDate()}日.csv`; link.click(); showToast('Excel 已导出'); }
-  function exportPDF() { const cats = getAllCategories(), now = new Date(), ws = new Date(now); ws.setDate(now.getDate() - now.getDay() + 1); const we = new Date(ws); we.setDate(ws.getDate() + 6); const userLabel = currentUser && !currentUser.isGuest ? currentUser.username : '游客'; const done = tasks.filter(t => t.completed).length, total = tasks.length, pending = tasks.filter(t => !t.completed), urgent = pending.filter(t => t.type === 'urgent'); const title = `工作排查周报 ${ws.getMonth()+1}月${ws.getDate()}日-${we.getMonth()+1}月${we.getDate()}日`; const rows = tasks.map((t, i) => { let updates = ''; if (t.updates && t.updates.length > 0) { updates = '<div style="font-size:12px;color:#718096;margin-top:4px;">更新记录：<br>' + t.updates.slice(-3).map(u => { const d = new Date(u.time); const icon = u.status === 'completed' ? '✅' : u.status === 'blocked' ? '⚠️' : '🔄'; return `${icon} ${d.getMonth()+1}/${d.getDate()} ${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')} ${u.text}`; }).join('<br>') + '</div>'; } return `<tr><td>${i+1}</td><td>${escapeHtml(t.text)}</td><td>${TYPE_MAP[t.type] || t.type}</td><td>${cats[t.category] || '一般'}</td><td>${t.tag || '-'}</td><td>${t.completed ? '✅ 已完成' : '⏳ 进行中'}</td><td>${new Date(t.created).toLocaleString('zh-CN')}</td><td>${updates}</td></tr>`; }).join(''); const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${title}</title><style>body{font-family:"Microsoft YaHei",sans-serif;padding:40px;color:#333}h1{color:#667eea;border-bottom:3px solid #667eea;padding-bottom:10px}.summary{background:#f7fafc;padding:20px;border-radius:8px;margin:20px 0}.summary-item{display:inline-block;margin:10px 20px;font-size:16px}.summary-item strong{color:#667eea;font-size:24px;display:block}table{width:100%;border-collapse:collapse;margin-top:20px}th{background:#667eea;color:white;padding:12px;text-align:left}td{padding:10px 12px;border-bottom:1px solid #e2e8f0}tr:nth-child(even){background:#f7fafc}</style></head><body><h1>📋 ${title}</h1><p style="color:#718096;margin-bottom:20px">用户：${userLabel}</p><div class="summary"><div class="summary-item"><strong>${total}</strong>总任务</div><div class="summary-item"><strong>${done}</strong>已完成</div><div class="summary-item"><strong>${total > 0 ? Math.round(done/total*100) : 0}%</strong>完成率</div><div class="summary-item"><strong>${pending.length}</strong>待完成</div><div class="summary-item"><strong style="color:#c53030">${urgent.length}</strong>紧急</div></div><h2>📝 任务明细</h2><table><tr><th>序号</th><th>任务内容</th><th>类型</th><th>分类</th><th>标签</th><th>状态</th><th>创建时间</th><th>进度更新</th></tr>${rows}</table><div style="margin-top:40px;padding-top:20px;border-top:2px solid #e2e8f0;color:#a0aec0;font-size:12px">生成时间：${now.toLocaleString('zh-CN')} | 工作排查登记系统</div></body></html>`; const printWin = window.open('', '_blank'); printWin.document.write(html); printWin.document.close(); printWin.focus(); setTimeout(() => { printWin.print(); printWin.close(); }, 300); showToast('PDF 已导出'); }
+  function exportExcel() { const cats = getAllCategories(), now = new Date(), ws = new Date(now); ws.setDate(now.getDate() - now.getDay() + 1); const we = new Date(ws); we.setDate(ws.getDate() + 6); const userLabel = currentUser && !currentUser.isGuest ? currentUser.username : '游客'; const done = tasks.filter(t => t.completed).length, total = tasks.length, pending = tasks.filter(t => !t.completed), urgent = pending.filter(t => t.type === 'urgent'); let csv = '\uFEFF'; csv += `工作排查周报 ${ws.getMonth()+1}月${ws.getDate()}日-${we.getMonth()+1}月${we.getDate()}日\n`; csv += `用户：${userLabel}\n\n`; csv += `统计概览\n`; csv += `总任务数,${total}\n`; csv += `已完成,${done}\n`; csv += `完成率,${total > 0 ? Math.round(done/total*100) : 0}%\n`; csv += `待完成,${pending.length}\n`; csv += `紧急任务,${urgent.length}\n\n`; csv += `任务明细\n`; csv += `序号,任务内容,类型,分类,标签,状态,创建时间,跟进历史\n`; tasks.forEach((t, i) => { const status = t.completed ? '已完成' : '进行中'; const created = new Date(t.created).toLocaleString('zh-CN'); const history = t.updates && t.updates.length > 0 ? t.updates.slice(-3).map(u => { const d = new Date(u.time); const st = u.status === 'completed' ? '完成' : u.status === 'blocked' ? '受阻' : '跟进'; return `${d.getMonth()+1}/${d.getDate()} ${st}:${u.text}`; }).join(' | ') : '无更新'; csv += `${i+1},"${t.text}",${TYPE_MAP[t.type] || t.type},${cats[t.category] || '一般'},${t.tag || '-'},${status},${created},"${history}"\n`; }); const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `工作周报_${userLabel}_${ws.getMonth()+1}月${ws.getDate()}日.csv`; link.click(); showToast('Excel 已导出'); }
+  function exportPDF() { const cats = getAllCategories(), now = new Date(), ws = new Date(now); ws.setDate(now.getDate() - now.getDay() + 1); const we = new Date(ws); we.setDate(ws.getDate() + 6); const userLabel = currentUser && !currentUser.isGuest ? currentUser.username : '游客'; const done = tasks.filter(t => t.completed).length, total = tasks.length, pending = tasks.filter(t => !t.completed), urgent = pending.filter(t => t.type === 'urgent'); const title = `工作排查周报 ${ws.getMonth()+1}月${ws.getDate()}日-${we.getMonth()+1}月${we.getDate()}日`; const rows = tasks.map((t, i) => { let history = ''; if (t.updates && t.updates.length > 0) { history = '<div style="font-size:12px;color:#718096;margin-top:4px;">跟进历史：<br>' + t.updates.slice(-3).map(u => { const d = new Date(u.time); const icon = u.status === 'completed' ? '✅' : u.status === 'blocked' ? '⚠️' : '🔄'; const st = u.status === 'completed' ? '完成' : u.status === 'blocked' ? '受阻' : '跟进'; return `${icon} ${d.getMonth()+1}/${d.getDate()} ${st}：${u.text}`; }).join('<br>') + '</div>'; } return `<tr><td>${i+1}</td><td>${escapeHtml(t.text)}</td><td>${TYPE_MAP[t.type] || t.type}</td><td>${cats[t.category] || '一般'}</td><td>${t.tag || '-'}</td><td>${t.completed ? '✅ 已完成' : '⏳ 进行中'}</td><td>${new Date(t.created).toLocaleString('zh-CN')}</td><td>${history}</td></tr>`; }).join(''); const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${title}</title><style>body{font-family:"Microsoft YaHei",sans-serif;padding:40px;color:#333}h1{color:#667eea;border-bottom:3px solid #667eea;padding-bottom:10px}.summary{background:#f7fafc;padding:20px;border-radius:8px;margin:20px 0}.summary-item{display:inline-block;margin:10px 20px;font-size:16px}.summary-item strong{color:#667eea;font-size:24px;display:block}table{width:100%;border-collapse:collapse;margin-top:20px}th{background:#667eea;color:white;padding:12px;text-align:left}td{padding:10px 12px;border-bottom:1px solid #e2e8f0}tr:nth-child(even){background:#f7fafc}</style></head><body><h1>📋 ${title}</h1><p style="color:#718096;margin-bottom:20px">用户：${userLabel}</p><div class="summary"><div class="summary-item"><strong>${total}</strong>总任务</div><div class="summary-item"><strong>${done}</strong>已完成</div><div class="summary-item"><strong>${total > 0 ? Math.round(done/total*100) : 0}%</strong>完成率</div><div class="summary-item"><strong>${pending.length}</strong>待完成</div><div class="summary-item"><strong style="color:#c53030">${urgent.length}</strong>紧急</div></div><h2>📝 全部任务清单</h2><table><tr><th>序号</th><th>任务内容</th><th>类型</th><th>分类</th><th>标签</th><th>状态</th><th>创建时间</th><th>跟进历史</th></tr>${rows}</table><div style="margin-top:40px;padding-top:20px;border-top:2px solid #e2e8f0;color:#a0aec0;font-size:12px">生成时间：${now.toLocaleString('zh-CN')} | 工作排查登记系统</div></body></html>`; const printWin = window.open('', '_blank'); printWin.document.write(html); printWin.document.close(); printWin.focus(); setTimeout(() => { printWin.print(); printWin.close(); }, 300); showToast('PDF 已导出'); }
   
   function renderReminders() {
     const dn = currentUser && !currentUser.isGuest ? currentUser.username : '游客';
@@ -806,13 +827,13 @@ const App = (function() {
     const cats = getAllCategories();
     document.getElementById('categoryList').innerHTML = Object.entries(cats).map(([key, name]) => { const count = tasks.filter(t => t.category === key).length; const isDefault = !!CONFIG.DEFAULT_CATEGORIES[key]; return `<div class="category-item"><div style="display:flex;align-items:center;flex:1;"><span class="category-name" data-key="${key}" ondblclick="App.startEditCategoryName('${key}')">${name}</span><span class="category-count">（${count} 项）</span></div><div class="cat-actions">${isDefault ? '<span style="font-size:12px;color:#a0aec0;margin-right:8px;">默认</span>' : ''}<button class="btn btn-small btn-primary" onclick="App.openEditCategoryModal('${key}')" style="background:#4299e1;">✏️</button><button class="btn btn-small btn-danger" onclick="App.deleteCategory('${key}')">🗑️</button></div></div>`; }).join('');
   }
-  function addCustomCategory() { const name = document.getElementById('newCategoryInput').value.trim(); if (!name) { showToast('请输入分类名称'); return; } const cats = getAllCategories(); if (Object.values(cats).includes(name)) { showToast('该分类已存在'); return; } customCategories.push({ id: 'cat_' + Date.now(), name }); saveAllData(); document.getElementById('newCategoryInput').value = ''; renderSettings(); renderHome(); showToast('分类已添加'); }
+  function addCustomCategory() { const name = document.getElementById('newCategoryInput').value.trim(); if (!name) { showToast('请输入分类名称'); return; } const cats = getAllCategories(); if (Object.values(cats).includes(name)) { showToast('该分类已存在'); return; } const newId = 'cat_' + Date.now(); customCategories.push({ id: newId, name }); categoryOrder.push(newId); saveAllData(); document.getElementById('newCategoryInput').value = ''; renderSettings(); renderHome(); showToast('分类已添加'); }
   function startEditCategoryName(key) { const el = document.querySelector('.category-name[data-key="' + key + '"]'); if (!el) return; el.contentEditable = 'true'; el.focus(); const range = document.createRange(); range.selectNodeContents(el); const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range); el.onblur = function() { const newName = el.textContent.trim(); const oldName = getAllCategories()[key]; if (newName && newName !== oldName) { const cats = getAllCategories(); const exists = Object.entries(cats).some(([k, v]) => k !== key && v === newName); if (exists) { showToast('该名称已存在'); el.textContent = oldName; } else { if (CONFIG.DEFAULT_CATEGORIES[key]) { customCategories.push({ id: key, name: newName }); } else { const cat = customCategories.find(c => c.id === key); if (cat) cat.name = newName; } saveAllData(); renderSettings(); renderHome(); showToast('名称已修改'); } } else { el.textContent = oldName; } el.contentEditable = 'false'; }; el.onkeydown = function(e) { if (e.key === 'Enter') { e.preventDefault(); el.blur(); } else if (e.key === 'Escape') { el.textContent = getAllCategories()[key]; el.contentEditable = 'false'; } }; }
   function openEditCategoryModal(key) { editingCategoryId = key; const cats = getAllCategories(); document.getElementById('editCategoryInput').value = cats[key] || ''; document.getElementById('editCategoryModal').classList.add('active'); setTimeout(() => document.getElementById('editCategoryInput').focus(), 100); }
   function confirmEditCategory() { const newName = document.getElementById('editCategoryInput').value.trim(); if (!newName) { showToast('名称不能为空'); return; } const cats = getAllCategories(); if (cats[editingCategoryId] === newName) { closeModal('editCategoryModal'); return; } const exists = Object.entries(cats).some(([k, v]) => k !== editingCategoryId && v === newName); if (exists) { showToast('该名称已存在'); return; } if (CONFIG.DEFAULT_CATEGORIES[editingCategoryId]) { customCategories.push({ id: editingCategoryId, name: newName }); } else { const cat = customCategories.find(c => c.id === editingCategoryId); if (cat) cat.name = newName; } saveAllData(); renderSettings(); renderHome(); closeModal('editCategoryModal'); editingCategoryId = null; showToast('名称已修改'); }
-  function deleteCategory(key) { const cats = getAllCategories(); const catName = cats[key]; if (!catName) return; if (key === 'general') { showToast('「一般事务」不能删除'); return; } const count = tasks.filter(t => t.category === key).length; const msg = count > 0 ? `「${catName}」下有 ${count} 个任务，删除后这些任务将归类为「一般事务」，确定删除吗？` : `确定删除分类「${catName}」吗？`; if (!confirm(msg)) return; tasks.forEach(t => { if (t.category === key) t.category = 'general'; }); customCategories = customCategories.filter(c => c.id !== key); saveAllData(); renderSettings(); renderHome(); showToast('分类已删除'); }
-  function backupData() { const data = { tasks, customCategories, taskReminders, activeReminders, username: currentUser && !currentUser.isGuest ? currentUser.username : null, exportTime: new Date().toISOString(), version: '3.0' }; const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `工作排查备份_${new Date().toLocaleDateString('zh-CN')}.json`; link.click(); const info = document.getElementById('backupInfo'); if (info) info.textContent = `✅ 导出成功！${tasks.length} 个任务，${customCategories.length} 个分类`; showToast('数据已导出'); }
-  function restoreData(input) { const file = input.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = function(e) { try { const data = JSON.parse(e.target.result); if (data.tasks) tasks = data.tasks; if (data.customCategories) customCategories = data.customCategories; if (data.taskReminders) taskReminders = data.taskReminders; if (data.activeReminders) activeReminders = data.activeReminders; saveAllData(); renderHome(); renderWeekly(); renderSettings(); renderReminders(); const info = document.getElementById('backupInfo'); if (info) info.textContent = `✅ 恢复成功！${tasks.length} 个任务已恢复`; showToast('数据恢复成功'); } catch(err) { showToast('文件格式错误'); } }; reader.readAsText(file); input.value = ''; }
+  function deleteCategory(key) { const cats = getAllCategories(); const catName = cats[key]; if (!catName) return; if (key === 'general') { showToast('「一般事务」不能删除'); return; } const count = tasks.filter(t => t.category === key).length; const msg = count > 0 ? `「${catName}」下有 ${count} 个任务，删除后这些任务将归类为「一般事务」，确定删除吗？` : `确定删除分类「${catName}」吗？`; if (!confirm(msg)) return; tasks.forEach(t => { if (t.category === key) t.category = 'general'; }); customCategories = customCategories.filter(c => c.id !== key); categoryOrder = categoryOrder.filter(k => k !== key); saveAllData(); renderSettings(); renderHome(); showToast('分类已删除'); }
+  function backupData() { const data = { tasks, customCategories, taskReminders, activeReminders, categoryOrder, username: currentUser && !currentUser.isGuest ? currentUser.username : null, exportTime: new Date().toISOString(), version: '4.0' }; const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `工作排查备份_${new Date().toLocaleDateString('zh-CN')}.json`; link.click(); const info = document.getElementById('backupInfo'); if (info) info.textContent = `✅ 导出成功！${tasks.length} 个任务，${customCategories.length} 个分类`; showToast('数据已导出'); }
+  function restoreData(input) { const file = input.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = function(e) { try { const data = JSON.parse(e.target.result); if (data.tasks) tasks = data.tasks; if (data.customCategories) customCategories = data.customCategories; if (data.taskReminders) taskReminders = data.taskReminders; if (data.activeReminders) activeReminders = data.activeReminders; if (data.categoryOrder) categoryOrder = data.categoryOrder; saveAllData(); renderHome(); renderWeekly(); renderSettings(); renderReminders(); const info = document.getElementById('backupInfo'); if (info) info.textContent = `✅ 恢复成功！${tasks.length} 个任务已恢复`; showToast('数据恢复成功'); } catch(err) { showToast('文件格式错误'); } }; reader.readAsText(file); input.value = ''; }
   
   function startReminderCheck() { if (reminderTimer) clearInterval(reminderTimer); checkReminders(); reminderTimer = setInterval(checkReminders, 30000); }
   function checkReminders() {
@@ -864,12 +885,13 @@ const App = (function() {
   function closeModal(id) { document.getElementById(id).classList.remove('active'); }
   
   document.addEventListener('DOMContentLoaded', init);
-  document.addEventListener('click', function(e) { if (!e.target.closest('.header-user')) document.getElementById('userMenu').classList.remove('show'); });
+  document.addEventListener('click', function(e) { if (!e.target.closest('.top-nav-item')) document.getElementById('userMenu').classList.remove('show'); });
   
   return {
     switchAuthTab, handleLogin, handleRegister, guestLogin, handleImportOnLogin, logout,
     switchTab, setFilter, addTask, startEditTaskName, toggleComplete, deleteTask,
-    openUpdateModal, saveUpdate, openCategoryModal, confirmAddCategory,
+    openUpdateModal, saveUpdate, openEditUpdateModal, saveEditUpdate,
+    openCategoryModal, confirmAddCategory,
     toggleUserMenu, showUserInfo, exportData,
     exportExcel, exportPDF,
     dismissActiveReminder,
@@ -878,8 +900,7 @@ const App = (function() {
     backupData, restoreData,
     saveGitHubToken, clearGitHubToken,
     dismissReminder, closeModal,
-    onDragStart, onDragEnd, onDragOver, onDrop,
-    onTouchStart, onTouchMove, onTouchEnd
+    onFilterDragStart, onFilterDragEnd, onFilterDragOver, onFilterDrop
   };
 })();
 </script>
